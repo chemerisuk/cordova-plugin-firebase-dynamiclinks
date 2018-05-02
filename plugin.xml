@@ -1,0 +1,94 @@
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+xmlns:android="http://schemas.android.com/apk/res/android"
+           id="cordova-plugin-firebase-dynamiclinks"
+      version="0.13.1">
+
+    <name>FirebaseDynamicLinksPlugin</name>
+    <description>Cordova plugin for Firebase Dynamic Links</description>
+    <license>MIT</license>
+    <keywords>cordova</keywords>
+
+    <engines>
+        <engine name="cordova" version=">=6.0.0"/>
+        <engine name="cordova-android" version=">=6.0.0"/>
+        <engine name="cordova-ios" version=">=4.3.0"/>
+    </engines>
+
+    <js-module name="FirebaseDynamicLinks" src="www/FirebaseDynamicLinks.js">
+        <merges target="cordova.plugins.firebase.dynamiclinks" />
+    </js-module>
+
+    <preference name="APP_DOMAIN" />
+    <preference name="APP_PATH" default ="/" />
+
+    <platform name="android">
+        <preference name="FIREBASE_VERSION" default="11.6.+"/>
+
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="FirebaseDynamicLinks">
+                <param name="android-package" value="by.chemerisuk.cordova.firebase.FirebaseDynamicLinksPlugin" />
+                <param name="onload" value="false" />
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="$APP_DOMAIN" android:pathPrefix="$APP_PATH"/>
+                <data android:scheme="https" android:host="$APP_DOMAIN" android:pathPrefix="$APP_PATH"/>
+            </intent-filter>
+        </config-file>
+
+        <source-file src="src/android/FirebaseDynamicLinksPlugin.java" target-dir="src/by/chemerisuk/cordova/firebase" />
+
+        <dependency id="cordova-support-google-services" version="~1.1.0"/>
+
+        <framework src="com.google.firebase:firebase-dynamic-links:$FIREBASE_VERSION" />
+    </platform>
+
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="FirebaseDynamicLinks">
+                <param name="ios-package" value="FirebaseDynamicLinksPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+            <array>
+                <dict>
+                    <key>CFBundleTypeRole</key>
+                    <string>Editor</string>
+                    <key>CFBundleURLName</key>
+                    <string>BUNDLE_ID</string>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>$PACKAGE_NAME</string>
+                    </array>
+                </dict>
+            </array>
+        </config-file>
+
+        <config-file target="*-Debug.plist" parent="com.apple.developer.associated-domains">
+            <array>
+                    <string>applinks:$APP_DOMAIN</string>
+            </array>
+        </config-file>
+
+        <config-file target="*-Release.plist" parent="com.apple.developer.associated-domains">
+            <array>
+                    <string>applinks:$APP_DOMAIN</string>
+            </array>
+        </config-file>
+
+        <header-file src="src/ios/AppDelegate+FirebaseDynamicLinksPlugin.h" />
+        <source-file src="src/ios/AppDelegate+FirebaseDynamicLinksPlugin.m" />
+        <header-file src="src/ios/FirebaseDynamicLinksPlugin.h" />
+        <source-file src="src/ios/FirebaseDynamicLinksPlugin.m" />
+
+        <framework src="Firebase/DynamicLinks" type="podspec" spec="~> 4.1"/>
+    </platform>
+
+</plugin>
