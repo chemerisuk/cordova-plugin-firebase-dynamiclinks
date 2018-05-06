@@ -11,7 +11,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <engines>
         <engine name="cordova" version=">=6.0.0"/>
         <engine name="cordova-android" version=">=6.0.0"/>
-        <engine name="cordova-ios" version=">=4.3.0"/>
+        <engine name="cordova-ios" version=">=4.4.0"/>
     </engines>
 
     <js-module name="FirebaseDynamicLinks" src="www/FirebaseDynamicLinks.js">
