@@ -35,7 +35,7 @@
 - (void)postDynamicLink:(FIRDynamicLink*) dynamicLink {
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     NSString* absoluteUrl = dynamicLink.url.absoluteString;
-    BOOL weakConfidence = (dynamicLink.matchConfidence == FIRDynamicLinkMatchConfidenceWeak);
+    BOOL weakConfidence = (dynamicLink.matchType == FIRDLMatchTypeWeak);
 
     [data setObject:(absoluteUrl ? absoluteUrl : @"") forKey:@"deepLink"];
     [data setObject:(weakConfidence ? @"Weak" : @"Strong") forKey:@"matchType"];

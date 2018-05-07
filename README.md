@@ -14,7 +14,7 @@ Variables `APP_DOMAIN` and `APP_PATH` specify web URL where your app will start 
 - iOS
 - Android
 
-Firebase Dynamic Links SDK has [unresolved bug](https://github.com/firebase/firebase-ios-sdk/issues/233) related to parsing `deepLink` for new app installs. It order to get it work your dynamic link MUST have [app preview page](https://firebase.google.com/docs/dynamic-links/link-previews), which is the default setting.
+Firebase Dynamic Links SDK has an [unresolved bug](https://github.com/firebase/firebase-ios-sdk/issues/233) related to parsing `deepLink` for new app installs. In order to get it work your dynamic link MUST have an [app preview page](https://firebase.google.com/docs/dynamic-links/link-previews), which by default.
 
 ## Methods
 
