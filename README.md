@@ -5,9 +5,9 @@
 
     cordova plugin add cordova-plugin-firebase-dynamiclinks --save --variable APP_DOMAIN="example.com"
 
-If you need to set a specific dependency version on Android then use variable `FIREBASE_VERSION`.
-
 Variables `APP_DOMAIN` and `APP_PATH` specify web URL where your app will start an activity to handle the link.
+
+Use variable `FIREBASE_DYNAMIC_LINKS_VERSION` to override dependency version on Android.
 
 ## Supported Platforms
 
@@ -28,5 +28,5 @@ window.cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(data) {
 
 [npm-url]: https://www.npmjs.com/package/cordova-plugin-firebase-dynamiclinks
 [npm-version]: https://img.shields.io/npm/v/cordova-plugin-firebase-dynamiclinks.svg
-[npm-downloads]: https://img.shields.io/npm/dt/cordova-plugin-firebase-dynamiclinks.svg
+[npm-downloads]: https://img.shields.io/npm/dm/cordova-plugin-firebase-dynamiclinks.svg
 
