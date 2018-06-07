@@ -21,7 +21,7 @@ Firebase Dynamic Links SDK has an [unresolved bug](https://github.com/firebase/f
 ### onDynamicLink(_callback_)
 Registers callback that is triggered on each dynamic link click.
 ```js
-window.cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(data) {
+cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(data) {
     console.log("Dynamic link click with data: ", data);
 });
 ```

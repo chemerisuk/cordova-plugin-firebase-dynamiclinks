@@ -24,7 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
+public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin implements OnSuccessListener<PendingDynamicLinkData> {
     private static final String TAG = "FirebaseDynamicLinks";
 
     private CallbackContext dynamicLinkCallback;
@@ -47,27 +47,27 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
 
     private void respondWithDynamicLink(Intent intent) {
         FirebaseDynamicLinks.getInstance().getDynamicLink(intent)
-            .addOnSuccessListener(cordova.getActivity(), new OnSuccessListener<PendingDynamicLinkData>() {
-                @Override
-                public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                    if (pendingDynamicLinkData != null) {
-                        Uri deepLink = pendingDynamicLinkData.getLink();
+            .addOnSuccessListener(cordova.getActivity(), this);
+    }
 
-                        if (deepLink != null) {
-                            JSONObject response = new JSONObject();
-                            try {
-                                response.put("deepLink", deepLink);
-                                response.put("clickTimestamp", pendingDynamicLinkData.getClickTimestamp());
+    @Override
+    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+        if (pendingDynamicLinkData != null) {
+            Uri deepLink = pendingDynamicLinkData.getLink();
 
-                                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, response);
-                                pluginResult.setKeepCallback(true);
-                                dynamicLinkCallback.sendPluginResult(pluginResult);
-                            } catch (JSONException e) {
-                                Log.e(TAG, "Fail to handle dynamic link data", e);
-                            }
-                        }
-                    }
+            if (deepLink != null) {
+                JSONObject response = new JSONObject();
+                try {
+                    response.put("deepLink", deepLink);
+                    response.put("clickTimestamp", pendingDynamicLinkData.getClickTimestamp());
+
+                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, response);
+                    pluginResult.setKeepCallback(true);
+                    dynamicLinkCallback.sendPluginResult(pluginResult);
+                } catch (JSONException e) {
+                    Log.e(TAG, "Fail to handle dynamic link data", e);
                 }
-            });
+            }
+        }
     }
 }
