@@ -1,26 +1,17 @@
 package by.chemerisuk.cordova.firebase;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.util.Log;
-import android.text.TextUtils;
 
 import by.chemerisuk.cordova.support.CordovaMethod;
 import by.chemerisuk.cordova.support.ReflectiveCordovaPlugin;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
