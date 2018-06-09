@@ -1,11 +1,6 @@
 #import "FirebaseDynamicLinksPlugin.h"
 
-
 @implementation FirebaseDynamicLinksPlugin
-
-- (void)pluginInitialize {
-    NSLog(@"Starting Firebase DynamicLinks plugin");
-}
 
 - (void)handleOpenURL:(NSNotification*)notification {
     NSURL* url = [notification object];
@@ -35,9 +30,11 @@
 - (void)postDynamicLink:(FIRDynamicLink*) dynamicLink {
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     NSString* absoluteUrl = dynamicLink.url.absoluteString;
+    NSString* minimumAppVersion = dynamicLink.minimumAppVersion;
     BOOL weakConfidence = (dynamicLink.matchType == FIRDLMatchTypeWeak);
 
     [data setObject:(absoluteUrl ? absoluteUrl : @"") forKey:@"deepLink"];
+    [data setObject:(minimumAppVersion ? minimumAppVersion : @"") forKey:@"minimumAppVersion"];
     [data setObject:(weakConfidence ? @"Weak" : @"Strong") forKey:@"matchType"];
 
     if (self.dynamicLinkCallbackId) {
