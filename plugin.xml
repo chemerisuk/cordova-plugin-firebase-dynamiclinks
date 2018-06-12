@@ -20,6 +20,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
     <preference name="APP_DOMAIN" />
     <preference name="APP_PATH" default ="/" />
+    <preference name="PAGE_LINK_DOMAIN" />
 
     <platform name="android">
         <preference name="FIREBASE_DYNAMIC_LINKS_VERSION" default="16.0.+"/>
@@ -37,6 +38,13 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="http" android:host="$APP_DOMAIN" android:pathPrefix="$APP_PATH"/>
                 <data android:scheme="https" android:host="$APP_DOMAIN" android:pathPrefix="$APP_PATH"/>
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="$PAGE_LINK_DOMAIN" android:scheme="http"/>
+                <data android:host="$PAGE_LINK_DOMAIN" android:scheme="https"/>
             </intent-filter>
         </config-file>
 
@@ -72,13 +80,15 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <config-file target="*-Debug.plist" parent="com.apple.developer.associated-domains">
             <array>
-                    <string>applinks:$APP_DOMAIN</string>
+                <string>applinks:$APP_DOMAIN</string>
+                <string>applinks:$PAGE_LINK_DOMAIN</string>
             </array>
         </config-file>
 
         <config-file target="*-Release.plist" parent="com.apple.developer.associated-domains">
             <array>
-                    <string>applinks:$APP_DOMAIN</string>
+                <string>applinks:$APP_DOMAIN</string>
+                <string>applinks:$PAGE_LINK_DOMAIN</string>
             </array>
         </config-file>
 
