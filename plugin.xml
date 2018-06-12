@@ -19,7 +19,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     </js-module>
 
     <preference name="APP_DOMAIN" />
-    <preference name="APP_PATH" default ="/" />
     <preference name="PAGE_LINK_DOMAIN" />
 
     <platform name="android">
@@ -36,8 +35,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="$APP_DOMAIN" android:pathPrefix="$APP_PATH"/>
-                <data android:scheme="https" android:host="$APP_DOMAIN" android:pathPrefix="$APP_PATH"/>
+                <data android:host="$APP_DOMAIN" android:scheme="http"/>
+                <data android:host="$APP_DOMAIN" android:scheme="https"/>
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
