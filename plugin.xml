@@ -59,6 +59,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <config-file parent="/*" target="config.xml">
             <feature name="FirebaseDynamicLinks">
                 <param name="ios-package" value="FirebaseDynamicLinksPlugin" />
+                <param name="onload" value="true" />
             </feature>
         </config-file>
 

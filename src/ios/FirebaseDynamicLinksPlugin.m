@@ -1,6 +1,19 @@
 #import "FirebaseDynamicLinksPlugin.h"
+static NSString *const CUSTOM_URL_SCHEME = @"dlscheme";
 
 @implementation FirebaseDynamicLinksPlugin
+
+- (void)pluginInitialize
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+}
+
+- (void)finishLaunching:(NSNotification *)notification
+{
+    [FIROptions defaultOptions].deepLinkURLScheme = CUSTOM_URL_SCHEME;
+    [FIRApp configure];
+}
+
 
 - (void)handleOpenURL:(NSNotification*)notification {
     NSURL* url = [notification object];
