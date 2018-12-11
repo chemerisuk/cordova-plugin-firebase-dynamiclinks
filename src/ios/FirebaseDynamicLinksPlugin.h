@@ -6,6 +6,7 @@
 @interface FirebaseDynamicLinksPlugin : CDVPlugin
 
 - (void)onDynamicLink:(CDVInvokedUrlCommand *)command;
+- (void)createReferralLink:(CDVInvokedUrlCommand *)command;
 - (void)postDynamicLink:(FIRDynamicLink*) dynamicLink;
 
 @property (nonatomic, copy) NSString *dynamicLinkCallbackId;

@@ -27,6 +27,30 @@
     }
 }
 
+- (void)createReferralLink:(CDVInvokedUrlCommand *)command {
+    self.dynamicLinkCallbackId = command.callbackId;
+    CDVPluginResult* pluginResult = nil;
+    NSString* referralURL = [command.arguments objectAtIndex:0];
+    if (referralURL != nil) {
+        NSURL *link = [[NSURL alloc] initWithString:referralURL];
+        NSString *dynamicLinksDomain = @"newstandtesting.page.link";
+        FIRDynamicLinkComponents *linkBuilder = [[FIRDynamicLinkComponents alloc]
+                                                 initWithLink:link
+                                                 domain:dynamicLinksDomain];
+        linkBuilder.iOSParameters = [[FIRDynamicLinkIOSParameters alloc]
+                                     initWithBundleID:@"com.the-new-stand.TheNewStand"];
+        linkBuilder.iOSParameters.appStoreID = @"962188372";
+        linkBuilder.androidParameters = [[FIRDynamicLinkAndroidParameters alloc]
+                                     initWithPackageName:@"com.the_new_stand.TheNewStand"];
+
+        NSLog(@"The long URL is: %@", linkBuilder.url);
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Link created!"];
+    } else {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.dynamicLinkCallbackId];
+}
+
 - (void)postDynamicLink:(FIRDynamicLink*) dynamicLink {
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     NSString* absoluteUrl = dynamicLink.url.absoluteString;

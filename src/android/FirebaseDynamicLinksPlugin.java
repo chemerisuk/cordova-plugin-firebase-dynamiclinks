@@ -36,6 +36,20 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
 
         respondWithDynamicLink(cordova.getActivity().getIntent());
     }
+    private void createReferralLink(CallbackContext callbackContext) {
+        this.dynamicLinkCallback = callbackContext;
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+        .setLink(Uri.parse("https://www.example.com/"))
+        .setDomainUriPrefix("https://newstandtesting.page.link")
+        // Open links with this app on Android
+        .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+        // Open links with com.example.ios on iOS
+        .setIosParameters(new DynamicLink.IosParameters.Builder("com.the-new-stand.TheNewStand").build())
+        .buildDynamicLink();
+
+        Uri dynamicLinkUri = dynamicLink.getUri();
+        respondWithDynamicLink(cordova.getActivity().getIntent());
+    }
 
     private void respondWithDynamicLink(Intent intent) {
         FirebaseDynamicLinks.getInstance().getDynamicLink(intent)
