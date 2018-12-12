@@ -29,26 +29,34 @@
 
 - (void)createReferralLink:(CDVInvokedUrlCommand *)command {
     self.dynamicLinkCallbackId = command.callbackId;
-    CDVPluginResult* pluginResult = nil;
     NSString* referralURL = [command.arguments objectAtIndex:0];
-    if (referralURL != nil) {
+    NSString* dynamicLinksDomain = [command.arguments objectAtIndex:1];
+    NSString* iOSBundleID = [command.arguments objectAtIndex:2];
+    NSString* iOSAppStoreID = [command.arguments objectAtIndex:3];
+    NSString* androidPackageName = [command.arguments objectAtIndex:4];
+    if (referralURL != nil && dynamicLinksDomain != nil && iOSBundleID != nil && iOSAppStoreID != nil && androidPackageName != nil) {
         NSURL *link = [[NSURL alloc] initWithString:referralURL];
-        NSString *dynamicLinksDomain = @"newstandtesting.page.link";
         FIRDynamicLinkComponents *linkBuilder = [[FIRDynamicLinkComponents alloc]
                                                  initWithLink:link
                                                  domain:dynamicLinksDomain];
         linkBuilder.iOSParameters = [[FIRDynamicLinkIOSParameters alloc]
-                                     initWithBundleID:@"com.the-new-stand.TheNewStand"];
-        linkBuilder.iOSParameters.appStoreID = @"962188372";
+                                     initWithBundleID:iOSBundleID];
+        linkBuilder.iOSParameters.appStoreID = iOSAppStoreID;
         linkBuilder.androidParameters = [[FIRDynamicLinkAndroidParameters alloc]
-                                     initWithPackageName:@"com.the_new_stand.TheNewStand"];
-
-        NSLog(@"The long URL is: %@", linkBuilder.url);
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Link created!"];
+                                         initWithPackageName:androidPackageName];
+        
+        [linkBuilder shortenWithCompletion:^(NSURL * _Nullable shortURL,
+                                             NSArray<NSString *> * _Nullable warnings,
+                                             NSError * _Nullable error) {
+            if (error || shortURL == nil) {
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:self.dynamicLinkCallbackId];
+                return;
+            }
+            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:shortURL.absoluteString] callbackId:self.dynamicLinkCallbackId];
+        }];
     } else {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:self.dynamicLinkCallbackId];
     }
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.dynamicLinkCallbackId];
 }
 
 - (void)postDynamicLink:(FIRDynamicLink*) dynamicLink {
