@@ -2,6 +2,14 @@
 
 @implementation FirebaseDynamicLinksPlugin
 
+- (void)pluginInitialize {
+    NSLog(@"Starting Firebase DynamicLinks plugin");
+
+    if (![FIRApp defaultApp]) {
+        [FIRApp configure];
+    }
+}
+
 - (void)handleOpenURL:(NSNotification*)notification {
     NSURL* url = [notification object];
 
