@@ -6,9 +6,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import by.chemerisuk.cordova.support.CordovaMethod;
-import by.chemerisuk.cordova.support.ReflectiveCordovaPlugin;
-
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,14 +19,15 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.google.firebase.dynamiclinks.ShortDynamicLink.Suffix.SHORT;
-import static com.google.firebase.dynamiclinks.ShortDynamicLink.Suffix.UNGUESSABLE;
+import by.chemerisuk.cordova.support.CordovaMethod;
+import by.chemerisuk.cordova.support.ReflectiveCordovaPlugin;
 
 
 public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
     private static final String TAG = "FirebaseDynamicLinks";
 
     private FirebaseDynamicLinks firebaseDynamicLinks;
+    private String domainUriPrefix;
     private CallbackContext dynamicLinkCallback;
 
     @Override
@@ -37,6 +35,7 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
         Log.d(TAG, "Starting Firebase Dynamic Links plugin");
 
         this.firebaseDynamicLinks = FirebaseDynamicLinks.getInstance();
+        this.domainUriPrefix = "https://" + this.preferences.getString("PAGE_LINK_DOMAIN", "");
     }
 
     @Override
@@ -77,8 +76,8 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
 
     private DynamicLink.Builder createDynamicLinkBuilder(JSONObject params) throws JSONException {
         DynamicLink.Builder builder = this.firebaseDynamicLinks.createDynamicLink();
-        // TODO: read preferences value
-        builder.setDomainUriPrefix(params.optString("domainUriPrefix"));
+
+        builder.setDomainUriPrefix(this.domainUriPrefix);
         builder.setLink(Uri.parse(params.getString("link")));
 
         JSONObject androidInfo = params.optJSONObject("androidInfo");
@@ -96,17 +95,13 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
         JSONObject iosInfo = params.optJSONObject("iosInfo");
         if (iosInfo != null) {
             DynamicLink.IosParameters.Builder iosInfoBuilder = new DynamicLink.IosParameters.Builder(iosInfo.getString("iosBundleId"));
-            if (iosInfo.has("iosAppStoreId")) {
-                iosInfoBuilder.setAppStoreId(iosInfo.getString("iosAppStoreId"));
-            }
+            iosInfoBuilder.setAppStoreId(iosInfo.optString("iosAppStoreId"));
+            iosInfoBuilder.setMinimumVersion(iosInfo.optString("iosMinPackageVersion"));
             if (iosInfo.has("iosFallbackLink")) {
-                iosInfoBuilder.setFallbackUrl(Uri.parse(iosInfo.getString("iosFallbackLink")));
+                iosInfoBuilder.setFallbackUrl(Uri.parse(iosInfo.optString("iosFallbackLink")));
             }
             if (iosInfo.has("iosIpadFallbackLink")) {
                 iosInfoBuilder.setIpadFallbackUrl(Uri.parse(iosInfo.getString("iosIpadFallbackLink")));
-            }
-            if (iosInfo.has("iosMinPackageVersion")) {
-                iosInfoBuilder.setMinimumVersion(iosInfo.getString("iosMinPackageVersion"));
             }
             builder.setIosParameters(iosInfoBuilder.build());
         }
@@ -122,12 +117,36 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
 
         JSONObject analyticsInfo = params.optJSONObject("analyticsInfo");
         if (analyticsInfo != null) {
-            // TODO
+            JSONObject googlePlayAnalyticsInfo = analyticsInfo.optJSONObject("googlePlayAnalytics");
+            JSONObject itunesConnectAnalyticsInfo = analyticsInfo.optJSONObject("itunesConnectAnalytics");
+            if (googlePlayAnalyticsInfo != null) {
+                DynamicLink.GoogleAnalyticsParameters.Builder gaInfoBuilder = new DynamicLink.GoogleAnalyticsParameters.Builder();
+                gaInfoBuilder.setSource(googlePlayAnalyticsInfo.optString("utmSource"));
+                gaInfoBuilder.setMedium(googlePlayAnalyticsInfo.optString("utmMedium"));
+                gaInfoBuilder.setCampaign(googlePlayAnalyticsInfo.optString("utmCampaign"));
+                gaInfoBuilder.setContent(googlePlayAnalyticsInfo.optString("utmContent"));
+                gaInfoBuilder.setTerm(googlePlayAnalyticsInfo.optString("utmTerm"));
+                builder.setGoogleAnalyticsParameters(gaInfoBuilder.build());
+            }
+
+            if (itunesConnectAnalyticsInfo != null) {
+                DynamicLink.ItunesConnectAnalyticsParameters.Builder iosAnalyticsInfo = new DynamicLink.ItunesConnectAnalyticsParameters.Builder();
+                iosAnalyticsInfo.setAffiliateToken(itunesConnectAnalyticsInfo.optString("at"));
+                iosAnalyticsInfo.setCampaignToken(itunesConnectAnalyticsInfo.optString("ct"));
+                iosAnalyticsInfo.setProviderToken(itunesConnectAnalyticsInfo.optString("pt"));
+                builder.setItunesConnectAnalyticsParameters(iosAnalyticsInfo.build());
+            }
         }
 
         JSONObject socialMetaTagInfo = params.optJSONObject("socialMetaTagInfo");
         if (socialMetaTagInfo != null) {
-            // TODO
+            DynamicLink.SocialMetaTagParameters.Builder socialInfoBuilder = new DynamicLink.SocialMetaTagParameters.Builder();
+            socialInfoBuilder.setTitle(socialMetaTagInfo.optString("socialTitle"));
+            socialInfoBuilder.setDescription(socialMetaTagInfo.optString("socialDescription"));
+            if (socialMetaTagInfo.has("socialImageLink")) {
+                socialInfoBuilder.setImageUrl(Uri.parse(socialMetaTagInfo.getString("socialImageLink")));
+            }
+            builder.setSocialMetaTagParameters(socialInfoBuilder.build());
         }
 
         return builder;

@@ -24,6 +24,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <platform name="android">
         <preference name="FIREBASE_CORE_VERSION" default="16.0.+"/>
         <preference name="FIREBASE_DYNAMIC_LINKS_VERSION" default="16.1.+"/>
+        <preference name="PAGE_LINK_DOMAIN" value="$PAGE_LINK_DOMAIN"/>
 
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="FirebaseDynamicLinks">
@@ -58,6 +59,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     </platform>
 
     <platform name="ios">
+        <preference name="PAGE_LINK_DOMAIN" value="$PAGE_LINK_DOMAIN"/>
+
         <config-file parent="/*" target="config.xml">
             <feature name="FirebaseDynamicLinks">
                 <param name="ios-package" value="FirebaseDynamicLinksPlugin" />
