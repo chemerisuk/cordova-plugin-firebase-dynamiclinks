@@ -55,7 +55,7 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
     }
 
     @CordovaMethod(ExecutionThread.WORKER)
-    private void createLink(JSONObject params, int linkType, CallbackContext callbackContext) throws JSONException {
+    private void createLink(JSONObject params, int linkType, final CallbackContext callbackContext) throws JSONException {
         DynamicLink.Builder builder = createDynamicLinkBuilder(params);
         if (linkType == 0) {
             callbackContext.success(builder.buildDynamicLink().getUri().toString());
@@ -76,13 +76,17 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
 
     private DynamicLink.Builder createDynamicLinkBuilder(JSONObject params) throws JSONException {
         DynamicLink.Builder builder = this.firebaseDynamicLinks.createDynamicLink();
-
-        builder.setDomainUriPrefix(this.domainUriPrefix);
+        builder.setDomainUriPrefix(params.optString("domainUriPrefix", this.domainUriPrefix));
         builder.setLink(Uri.parse(params.getString("link")));
 
         JSONObject androidInfo = params.optJSONObject("androidInfo");
         if (androidInfo != null) {
-            DynamicLink.AndroidParameters.Builder androidInfoBuilder = new DynamicLink.AndroidParameters.Builder();
+            DynamicLink.AndroidParameters.Builder androidInfoBuilder;
+            if (androidInfo.has("androidPackageName")) {
+                androidInfoBuilder = new DynamicLink.AndroidParameters.Builder(androidInfo.getString("androidPackageName"));
+            } else {
+                androidInfoBuilder = new DynamicLink.AndroidParameters.Builder();
+            }
             if (androidInfo.has("androidFallbackLink")) {
                 androidInfoBuilder.setFallbackUrl(Uri.parse(androidInfo.getString("androidFallbackLink")));
             }
@@ -98,7 +102,7 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
             iosInfoBuilder.setAppStoreId(iosInfo.optString("iosAppStoreId"));
             iosInfoBuilder.setMinimumVersion(iosInfo.optString("iosMinPackageVersion"));
             if (iosInfo.has("iosFallbackLink")) {
-                iosInfoBuilder.setFallbackUrl(Uri.parse(iosInfo.optString("iosFallbackLink")));
+                iosInfoBuilder.setFallbackUrl(Uri.parse(iosInfo.getString("iosFallbackLink")));
             }
             if (iosInfo.has("iosIpadFallbackLink")) {
                 iosInfoBuilder.setIpadFallbackUrl(Uri.parse(iosInfo.getString("iosIpadFallbackLink")));
@@ -118,7 +122,6 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
         JSONObject analyticsInfo = params.optJSONObject("analyticsInfo");
         if (analyticsInfo != null) {
             JSONObject googlePlayAnalyticsInfo = analyticsInfo.optJSONObject("googlePlayAnalytics");
-            JSONObject itunesConnectAnalyticsInfo = analyticsInfo.optJSONObject("itunesConnectAnalytics");
             if (googlePlayAnalyticsInfo != null) {
                 DynamicLink.GoogleAnalyticsParameters.Builder gaInfoBuilder = new DynamicLink.GoogleAnalyticsParameters.Builder();
                 gaInfoBuilder.setSource(googlePlayAnalyticsInfo.optString("utmSource"));
@@ -129,6 +132,7 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
                 builder.setGoogleAnalyticsParameters(gaInfoBuilder.build());
             }
 
+            JSONObject itunesConnectAnalyticsInfo = analyticsInfo.optJSONObject("itunesConnectAnalytics");
             if (itunesConnectAnalyticsInfo != null) {
                 DynamicLink.ItunesConnectAnalyticsParameters.Builder iosAnalyticsInfo = new DynamicLink.ItunesConnectAnalyticsParameters.Builder();
                 iosAnalyticsInfo.setAffiliateToken(itunesConnectAnalyticsInfo.optString("at"));
