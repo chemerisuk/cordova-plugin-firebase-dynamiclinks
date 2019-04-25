@@ -5,19 +5,19 @@ module.exports = {
     onDynamicLink: function(onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "onDynamicLink", []);
     },
-    createLink: function(params) {
+    createDynamicLink: function(params) {
         return new Promise(function(resolve, reject) {
-            exec(resolve, reject, PLUGIN_NAME, "createLink", [params, 0]);
+            exec(resolve, reject, PLUGIN_NAME, "createDynamicLink", [params, 0]);
         });
     },
-    createShortLink: function(params) {
+    createShortDynamicLink: function(params) {
         return new Promise(function(resolve, reject) {
-            exec(resolve, reject, PLUGIN_NAME, "createLink", [params, 2]);
+            exec(resolve, reject, PLUGIN_NAME, "createDynamicLink", [params, 2]);
         });
     },
-    createUnguessableLink: function(params) {
+    createUnguessableDynamicLink: function(params) {
         return new Promise(function(resolve, reject) {
-            exec(resolve, reject, PLUGIN_NAME, "createLink", [params, 1]);
+            exec(resolve, reject, PLUGIN_NAME, "createDynamicLink", [params, 1]);
         });
     }
 };

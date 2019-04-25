@@ -55,7 +55,7 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
     }
 
     @CordovaMethod(ExecutionThread.WORKER)
-    private void createLink(JSONObject params, int linkType, final CallbackContext callbackContext) throws JSONException {
+    private void createDynamicLink(JSONObject params, int linkType, final CallbackContext callbackContext) throws JSONException {
         DynamicLink.Builder builder = createDynamicLinkBuilder(params);
         if (linkType == 0) {
             callbackContext.success(builder.buildDynamicLink().getUri().toString());
