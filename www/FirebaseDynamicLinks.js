@@ -12,12 +12,12 @@ module.exports = {
     },
     createShortDynamicLink: function(params) {
         return new Promise(function(resolve, reject) {
-            exec(resolve, reject, PLUGIN_NAME, "createDynamicLink", [params, 2]);
+            exec(resolve, reject, PLUGIN_NAME, "createDynamicLink", [params, cordova.platformId === "ios" ? 1 : 2]);
         });
     },
     createUnguessableDynamicLink: function(params) {
         return new Promise(function(resolve, reject) {
-            exec(resolve, reject, PLUGIN_NAME, "createDynamicLink", [params, 1]);
+            exec(resolve, reject, PLUGIN_NAME, "createDynamicLink", [params, cordova.platformId === "ios" ? 2 : 1]);
         });
     }
 };

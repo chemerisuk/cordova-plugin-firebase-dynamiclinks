@@ -100,6 +100,7 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
         if (iosInfo != null) {
             DynamicLink.IosParameters.Builder iosInfoBuilder = new DynamicLink.IosParameters.Builder(iosInfo.getString("iosBundleId"));
             iosInfoBuilder.setAppStoreId(iosInfo.optString("iosAppStoreId"));
+            iosInfoBuilder.setIpadBundleId(iosInfo.optString("iosIpadBundleId"));
             iosInfoBuilder.setMinimumVersion(iosInfo.optString("iosMinPackageVersion"));
             if (iosInfo.has("iosFallbackLink")) {
                 iosInfoBuilder.setFallbackUrl(Uri.parse(iosInfo.getString("iosFallbackLink")));
