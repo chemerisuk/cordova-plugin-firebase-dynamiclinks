@@ -9,7 +9,7 @@
         [FIRApp configure];
     }
 
-    self.domainUriPrefix = [NSString stringWithFormat:@"https://%@", [self.commandDelegate.settings objectForKey:[@"DYNAMIC_LINK_DOMAIN" lowercaseString]]];
+    self.domainUriPrefix = [self.commandDelegate.settings objectForKey:[@"DYNAMIC_LINK_URIPREFIX" lowercaseString]];
 }
 
 - (void)handleOpenURL:(NSNotification*)notification {
