@@ -27,6 +27,7 @@ cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(data) {
     console.log("Dynamic link click with data:", data);
 });
 ```
+Every `create*` method accepts `dynamicLinkInfo` object as the first argument. Read section below to understand all supported [dynamic link parameters](#dynamic-link-parameters).
 
 ### createDynamicLink
 Creates a Dynamic Link from the parameters. Returns a promise fulfilled with the new dynamic link url.
@@ -67,7 +68,7 @@ Any create method supports all options below to customize a returned dynamic lin
   "androidInfo": {
     "androidPackageName": string,
     "androidFallbackLink": string,
-    "androidMinPackageVersionCode": string
+    "androidMinPackageVersionCode": number
   },
   "iosInfo": {
     "iosBundleId": string,
