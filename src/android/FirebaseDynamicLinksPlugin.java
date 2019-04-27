@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -61,16 +59,16 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
             callbackContext.success(builder.buildDynamicLink().getUri().toString());
         } else {
             builder.buildShortDynamicLink(linkType)
-                    .addOnCompleteListener(this.cordova.getActivity(), new OnCompleteListener<ShortDynamicLink>() {
-                        @Override
-                        public void onComplete(@NonNull Task<ShortDynamicLink> task) {
-                            if (task.isSuccessful()) {
-                                callbackContext.success(task.getResult().getShortLink().toString());
-                            } else {
-                                callbackContext.error(task.getException().getMessage());
-                            }
+                .addOnCompleteListener(this.cordova.getActivity(), new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            callbackContext.success(task.getResult().getShortLink().toString());
+                        } else {
+                            callbackContext.error(task.getException().getMessage());
                         }
-                    });
+                    }
+                });
         }
     }
 
