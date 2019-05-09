@@ -8,6 +8,12 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters;
+import com.google.firebase.dynamiclinks.DynamicLink.GoogleAnalyticsParameters;
+import com.google.firebase.dynamiclinks.DynamicLink.IosParameters;
+import com.google.firebase.dynamiclinks.DynamicLink.ItunesConnectAnalyticsParameters;
+import com.google.firebase.dynamiclinks.DynamicLink.NavigationInfoParameters;
+import com.google.firebase.dynamiclinks.DynamicLink.SocialMetaTagParameters;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
@@ -38,8 +44,6 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
 
     @Override
     public void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
         if (this.dynamicLinkCallback != null) {
             respondWithDynamicLink(intent);
         }
@@ -79,77 +83,34 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
 
         JSONObject androidInfo = params.optJSONObject("androidInfo");
         if (androidInfo != null) {
-            DynamicLink.AndroidParameters.Builder androidInfoBuilder;
-            if (androidInfo.has("androidPackageName")) {
-                androidInfoBuilder = new DynamicLink.AndroidParameters.Builder(androidInfo.getString("androidPackageName"));
-            } else {
-                androidInfoBuilder = new DynamicLink.AndroidParameters.Builder();
-            }
-            if (androidInfo.has("androidFallbackLink")) {
-                androidInfoBuilder.setFallbackUrl(Uri.parse(androidInfo.getString("androidFallbackLink")));
-            }
-            if (androidInfo.has("androidMinPackageVersionCode")) {
-                androidInfoBuilder.setMinimumVersion(androidInfo.getInt("androidMinPackageVersionCode"));
-            }
-            builder.setAndroidParameters(androidInfoBuilder.build());
+            builder.setAndroidParameters(getAndroidParameters(androidInfo));
         }
 
         JSONObject iosInfo = params.optJSONObject("iosInfo");
         if (iosInfo != null) {
-            DynamicLink.IosParameters.Builder iosInfoBuilder = new DynamicLink.IosParameters.Builder(iosInfo.getString("iosBundleId"));
-            iosInfoBuilder.setAppStoreId(iosInfo.optString("iosAppStoreId"));
-            iosInfoBuilder.setIpadBundleId(iosInfo.optString("iosIpadBundleId"));
-            iosInfoBuilder.setMinimumVersion(iosInfo.optString("iosMinPackageVersion"));
-            if (iosInfo.has("iosFallbackLink")) {
-                iosInfoBuilder.setFallbackUrl(Uri.parse(iosInfo.getString("iosFallbackLink")));
-            }
-            if (iosInfo.has("iosIpadFallbackLink")) {
-                iosInfoBuilder.setIpadFallbackUrl(Uri.parse(iosInfo.getString("iosIpadFallbackLink")));
-            }
-            builder.setIosParameters(iosInfoBuilder.build());
+            builder.setIosParameters(getIosParameters(iosInfo));
         }
 
         JSONObject navigationInfo = params.optJSONObject("navigationInfo");
         if (navigationInfo != null) {
-            DynamicLink.NavigationInfoParameters.Builder navigationInfoBuilder = new DynamicLink.NavigationInfoParameters.Builder();
-            if (navigationInfo.has("enableForcedRedirect")) {
-                navigationInfoBuilder.setForcedRedirectEnabled(navigationInfo.getBoolean("enableForcedRedirect"));
-            }
-            builder.setNavigationInfoParameters(navigationInfoBuilder.build());
+            builder.setNavigationInfoParameters(getNavigationInfoParameters(navigationInfo));
         }
 
         JSONObject analyticsInfo = params.optJSONObject("analyticsInfo");
         if (analyticsInfo != null) {
             JSONObject googlePlayAnalyticsInfo = analyticsInfo.optJSONObject("googlePlayAnalytics");
             if (googlePlayAnalyticsInfo != null) {
-                DynamicLink.GoogleAnalyticsParameters.Builder gaInfoBuilder = new DynamicLink.GoogleAnalyticsParameters.Builder();
-                gaInfoBuilder.setSource(googlePlayAnalyticsInfo.optString("utmSource"));
-                gaInfoBuilder.setMedium(googlePlayAnalyticsInfo.optString("utmMedium"));
-                gaInfoBuilder.setCampaign(googlePlayAnalyticsInfo.optString("utmCampaign"));
-                gaInfoBuilder.setContent(googlePlayAnalyticsInfo.optString("utmContent"));
-                gaInfoBuilder.setTerm(googlePlayAnalyticsInfo.optString("utmTerm"));
-                builder.setGoogleAnalyticsParameters(gaInfoBuilder.build());
+                builder.setGoogleAnalyticsParameters(getGoogleAnalyticsParameters(googlePlayAnalyticsInfo));
             }
-
             JSONObject itunesConnectAnalyticsInfo = analyticsInfo.optJSONObject("itunesConnectAnalytics");
             if (itunesConnectAnalyticsInfo != null) {
-                DynamicLink.ItunesConnectAnalyticsParameters.Builder iosAnalyticsInfo = new DynamicLink.ItunesConnectAnalyticsParameters.Builder();
-                iosAnalyticsInfo.setAffiliateToken(itunesConnectAnalyticsInfo.optString("at"));
-                iosAnalyticsInfo.setCampaignToken(itunesConnectAnalyticsInfo.optString("ct"));
-                iosAnalyticsInfo.setProviderToken(itunesConnectAnalyticsInfo.optString("pt"));
-                builder.setItunesConnectAnalyticsParameters(iosAnalyticsInfo.build());
+                builder.setItunesConnectAnalyticsParameters(getItunesConnectAnalyticsParameters(itunesConnectAnalyticsInfo));
             }
         }
 
         JSONObject socialMetaTagInfo = params.optJSONObject("socialMetaTagInfo");
         if (socialMetaTagInfo != null) {
-            DynamicLink.SocialMetaTagParameters.Builder socialInfoBuilder = new DynamicLink.SocialMetaTagParameters.Builder();
-            socialInfoBuilder.setTitle(socialMetaTagInfo.optString("socialTitle"));
-            socialInfoBuilder.setDescription(socialMetaTagInfo.optString("socialDescription"));
-            if (socialMetaTagInfo.has("socialImageLink")) {
-                socialInfoBuilder.setImageUrl(Uri.parse(socialMetaTagInfo.getString("socialImageLink")));
-            }
-            builder.setSocialMetaTagParameters(socialInfoBuilder.build());
+            builder.setSocialMetaTagParameters(getSocialMetaTagParameters(socialMetaTagInfo));
         }
 
         return builder;
@@ -176,5 +137,71 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
                         return result;
                     }
                 });
+    }
+
+    private AndroidParameters getAndroidParameters(JSONObject androidInfo) throws JSONException {
+        AndroidParameters.Builder androidInfoBuilder;
+        if (androidInfo.has("androidPackageName")) {
+            androidInfoBuilder = new AndroidParameters.Builder(androidInfo.getString("androidPackageName"));
+        } else {
+            androidInfoBuilder = new AndroidParameters.Builder();
+        }
+        if (androidInfo.has("androidFallbackLink")) {
+            androidInfoBuilder.setFallbackUrl(Uri.parse(androidInfo.getString("androidFallbackLink")));
+        }
+        if (androidInfo.has("androidMinPackageVersionCode")) {
+            androidInfoBuilder.setMinimumVersion(androidInfo.getInt("androidMinPackageVersionCode"));
+        }
+        return androidInfoBuilder.build();
+    }
+
+    private IosParameters getIosParameters(JSONObject iosInfo) throws JSONException {
+        IosParameters.Builder iosInfoBuilder = new IosParameters.Builder(iosInfo.getString("iosBundleId"));
+        iosInfoBuilder.setAppStoreId(iosInfo.optString("iosAppStoreId"));
+        iosInfoBuilder.setIpadBundleId(iosInfo.optString("iosIpadBundleId"));
+        iosInfoBuilder.setMinimumVersion(iosInfo.optString("iosMinPackageVersion"));
+        if (iosInfo.has("iosFallbackLink")) {
+            iosInfoBuilder.setFallbackUrl(Uri.parse(iosInfo.getString("iosFallbackLink")));
+        }
+        if (iosInfo.has("iosIpadFallbackLink")) {
+            iosInfoBuilder.setIpadFallbackUrl(Uri.parse(iosInfo.getString("iosIpadFallbackLink")));
+        }
+        return iosInfoBuilder.build();
+    }
+
+    private NavigationInfoParameters getNavigationInfoParameters(JSONObject navigationInfo) throws JSONException {
+        NavigationInfoParameters.Builder navigationInfoBuilder = new NavigationInfoParameters.Builder();
+        if (navigationInfo.has("enableForcedRedirect")) {
+            navigationInfoBuilder.setForcedRedirectEnabled(navigationInfo.getBoolean("enableForcedRedirect"));
+        }
+        return navigationInfoBuilder.build();
+    }
+
+    private GoogleAnalyticsParameters getGoogleAnalyticsParameters(JSONObject googlePlayAnalyticsInfo) {
+        GoogleAnalyticsParameters.Builder gaInfoBuilder = new GoogleAnalyticsParameters.Builder();
+        gaInfoBuilder.setSource(googlePlayAnalyticsInfo.optString("utmSource"));
+        gaInfoBuilder.setMedium(googlePlayAnalyticsInfo.optString("utmMedium"));
+        gaInfoBuilder.setCampaign(googlePlayAnalyticsInfo.optString("utmCampaign"));
+        gaInfoBuilder.setContent(googlePlayAnalyticsInfo.optString("utmContent"));
+        gaInfoBuilder.setTerm(googlePlayAnalyticsInfo.optString("utmTerm"));
+        return gaInfoBuilder.build();
+    }
+
+    private ItunesConnectAnalyticsParameters getItunesConnectAnalyticsParameters(JSONObject itunesConnectAnalyticsInfo) {
+        ItunesConnectAnalyticsParameters.Builder iosAnalyticsInfo = new ItunesConnectAnalyticsParameters.Builder();
+        iosAnalyticsInfo.setAffiliateToken(itunesConnectAnalyticsInfo.optString("at"));
+        iosAnalyticsInfo.setCampaignToken(itunesConnectAnalyticsInfo.optString("ct"));
+        iosAnalyticsInfo.setProviderToken(itunesConnectAnalyticsInfo.optString("pt"));
+        return iosAnalyticsInfo.build();
+    }
+
+    private SocialMetaTagParameters getSocialMetaTagParameters(JSONObject socialMetaTagInfo) throws JSONException {
+        SocialMetaTagParameters.Builder socialInfoBuilder = new SocialMetaTagParameters.Builder();
+        socialInfoBuilder.setTitle(socialMetaTagInfo.optString("socialTitle"));
+        socialInfoBuilder.setDescription(socialMetaTagInfo.optString("socialDescription"));
+        if (socialMetaTagInfo.has("socialImageLink")) {
+            socialInfoBuilder.setImageUrl(Uri.parse(socialMetaTagInfo.getString("socialImageLink")));
+        }
+        return socialInfoBuilder.build();
     }
 }
