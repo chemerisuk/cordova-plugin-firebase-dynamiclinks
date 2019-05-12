@@ -76,6 +76,29 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
         }
     }
 
+    private void respondWithDynamicLink(Intent intent) {
+        this.firebaseDynamicLinks.getDynamicLink(intent)
+                .continueWith(new Continuation<PendingDynamicLinkData, JSONObject>() {
+                    @Override
+                    public JSONObject then(Task<PendingDynamicLinkData> task) throws JSONException {
+                        PendingDynamicLinkData data = task.getResult();
+
+                        JSONObject result = new JSONObject();
+                        result.put("deepLink", data.getLink());
+                        result.put("clickTimestamp", data.getClickTimestamp());
+                        result.put("minimumAppVersion", data.getMinimumAppVersion());
+
+                        if (dynamicLinkCallback != null) {
+                            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
+                            pluginResult.setKeepCallback(true);
+                            dynamicLinkCallback.sendPluginResult(pluginResult);
+                        }
+
+                        return result;
+                    }
+                });
+    }
+
     private DynamicLink.Builder createDynamicLinkBuilder(JSONObject params) throws JSONException {
         DynamicLink.Builder builder = this.firebaseDynamicLinks.createDynamicLink();
         builder.setDomainUriPrefix(params.optString("domainUriPrefix", this.domainUriPrefix));
@@ -114,29 +137,6 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
         }
 
         return builder;
-    }
-
-    private void respondWithDynamicLink(Intent intent) {
-        this.firebaseDynamicLinks.getDynamicLink(intent)
-                .continueWith(new Continuation<PendingDynamicLinkData, JSONObject>() {
-                    @Override
-                    public JSONObject then(Task<PendingDynamicLinkData> task) throws JSONException {
-                        PendingDynamicLinkData data = task.getResult();
-
-                        JSONObject result = new JSONObject();
-                        result.put("deepLink", data.getLink());
-                        result.put("clickTimestamp", data.getClickTimestamp());
-                        result.put("minimumAppVersion", data.getMinimumAppVersion());
-
-                        if (dynamicLinkCallback != null) {
-                            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
-                            pluginResult.setKeepCallback(true);
-                            dynamicLinkCallback.sendPluginResult(pluginResult);
-                        }
-
-                        return result;
-                    }
-                });
     }
 
     private AndroidParameters getAndroidParameters(JSONObject androidInfo) throws JSONException {

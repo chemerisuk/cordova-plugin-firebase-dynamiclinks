@@ -23,7 +23,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
     <platform name="android">
         <preference name="FIREBASE_CORE_VERSION" default="16.0.+"/>
-        <preference name="FIREBASE_DYNAMIC_LINKS_VERSION" default="16.1.+"/>
+        <preference name="FIREBASE_DYNAMIC_LINKS_VERSION" default="17.0.+"/>
 
         <config-file parent="/*" target="res/xml/config.xml">
             <preference name="DYNAMIC_LINK_URIPREFIX" value="https://$PAGE_LINK_DOMAIN"/>

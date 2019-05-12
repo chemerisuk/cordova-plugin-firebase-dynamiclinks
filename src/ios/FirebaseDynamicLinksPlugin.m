@@ -40,86 +40,7 @@
 - (void)createDynamicLink:(CDVInvokedUrlCommand *)command {
     NSDictionary* params = [command.arguments objectAtIndex:0];
     int linkType = [[command.arguments objectAtIndex:1] intValue];
-
-    NSURL* link = [[NSURL alloc] initWithString:params[@"link"]];
-    NSString* domainUriPrefix = params[@"domainUriPrefix"];
-    if (!domainUriPrefix) {
-        domainUriPrefix = self.domainUriPrefix;
-    }
-
-    FIRDynamicLinkComponents *linkBuilder = [[FIRDynamicLinkComponents alloc]
-                                             initWithLink:link domainURIPrefix:domainUriPrefix];
-    NSDictionary* androidInfo = params[@"androidInfo"];
-    if (androidInfo) {
-        linkBuilder.androidParameters = [[FIRDynamicLinkAndroidParameters alloc]
-                                         initWithPackageName:androidInfo[@"androidPackageName"]];
-        NSNumber* minimumVersion = androidInfo[@"androidMinPackageVersionCode"];
-        if (minimumVersion) {
-            linkBuilder.androidParameters.minimumVersion = [minimumVersion intValue];
-        }
-        NSString* androidFallbackLink = androidInfo[@"androidFallbackLink"];
-        if (androidFallbackLink) {
-            linkBuilder.androidParameters.fallbackURL = [[NSURL alloc] initWithString:androidFallbackLink];
-        }
-    }
-
-    NSDictionary* iosInfo = params[@"iosInfo"];
-    if (iosInfo) {
-        linkBuilder.iOSParameters = [[FIRDynamicLinkIOSParameters alloc]
-                                     initWithBundleID:iosInfo[@"iosBundleId"]];
-        linkBuilder.iOSParameters.appStoreID = iosInfo[@"iosAppStoreId"];
-        linkBuilder.iOSParameters.iPadBundleID = iosInfo[@"iosIpadBundleId"];
-        linkBuilder.iOSParameters.minimumAppVersion = iosInfo[@"iosMinPackageVersion"];
-        NSString* iosFallbackLink = iosInfo[@"iosFallbackLink"];
-        if (iosFallbackLink) {
-            linkBuilder.iOSParameters.fallbackURL = [[NSURL alloc] initWithString:iosFallbackLink];
-        }
-        NSString* iosIpadFallbackLink = iosInfo[@"iosIpadFallbackLink"];
-        if (iosIpadFallbackLink) {
-            linkBuilder.iOSParameters.iPadFallbackURL = [[NSURL alloc] initWithString:iosIpadFallbackLink];
-        }
-    }
-
-    NSDictionary* navigationInfo = params[@"navigationInfo"];
-    if (navigationInfo) {
-        linkBuilder.navigationInfoParameters = [[FIRDynamicLinkNavigationInfoParameters alloc] init];
-        NSNumber* forcedRedirectEnabled = navigationInfo[@"enableForcedRedirect"];
-        if (forcedRedirectEnabled) {
-            linkBuilder.navigationInfoParameters.forcedRedirectEnabled = [forcedRedirectEnabled boolValue];
-        }
-    }
-
-    NSDictionary* analyticsInfo = params[@"analyticsInfo"];
-    if (analyticsInfo) {
-        NSDictionary* googlePlayAnalyticsInfo = params[@"googlePlayAnalytics"];
-        if (googlePlayAnalyticsInfo) {
-            linkBuilder.analyticsParameters = [[FIRDynamicLinkGoogleAnalyticsParameters alloc] init];
-            linkBuilder.analyticsParameters.source = googlePlayAnalyticsInfo[@"utmSource"];
-            linkBuilder.analyticsParameters.medium = googlePlayAnalyticsInfo[@"utmMedium"];
-            linkBuilder.analyticsParameters.campaign = googlePlayAnalyticsInfo[@"utmCampaign"];
-            linkBuilder.analyticsParameters.content = googlePlayAnalyticsInfo[@"utmContent"];
-            linkBuilder.analyticsParameters.term = googlePlayAnalyticsInfo[@"utmTerm"];
-        }
-
-        NSDictionary* itunesConnectAnalyticsInfo = params[@"itunesConnectAnalytics"];
-        if (itunesConnectAnalyticsInfo) {
-            linkBuilder.iTunesConnectParameters = [[FIRDynamicLinkItunesConnectAnalyticsParameters alloc] init];
-            linkBuilder.iTunesConnectParameters.affiliateToken = itunesConnectAnalyticsInfo[@"at"];
-            linkBuilder.iTunesConnectParameters.campaignToken = itunesConnectAnalyticsInfo[@"ct"];
-            linkBuilder.iTunesConnectParameters.providerToken = itunesConnectAnalyticsInfo[@"pt"];
-        }
-    }
-
-    NSDictionary* socialMetaTagInfo = params[@"socialMetaTagInfo"];
-    if (socialMetaTagInfo) {
-        linkBuilder.socialMetaTagParameters = [[FIRDynamicLinkSocialMetaTagParameters alloc] init];
-        linkBuilder.socialMetaTagParameters.title = socialMetaTagInfo[@"socialTitle"];
-        linkBuilder.socialMetaTagParameters.descriptionText = socialMetaTagInfo[@"socialDescription"];
-        NSString* socialImageLink = socialMetaTagInfo[@"socialImageLink"];
-        if (socialImageLink) {
-            linkBuilder.socialMetaTagParameters.imageURL = [[NSURL alloc] initWithString:socialImageLink];
-        }
-    }
+    FIRDynamicLinkComponents *linkBuilder = [self createDynamicLinkBuilder:params];
 
     if (linkType == 0) {
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:linkBuilder.url.absoluteString];
@@ -142,6 +63,114 @@
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }];
     }
+}
+
+- (FIRDynamicLinkComponents*) createDynamicLinkBuilder:(NSDictionary*) params {
+    NSURL* link = [[NSURL alloc] initWithString:params[@"link"]];
+    NSString* domainUriPrefix = params[@"domainUriPrefix"];
+    if (!domainUriPrefix) {
+        domainUriPrefix = self.domainUriPrefix;
+    }
+
+    FIRDynamicLinkComponents *linkBuilder = [[FIRDynamicLinkComponents alloc]
+                                             initWithLink:link domainURIPrefix:domainUriPrefix];
+    NSDictionary* androidInfo = params[@"androidInfo"];
+    if (androidInfo) {
+        linkBuilder.androidParameters = [self getAndroidParameters:androidInfo];
+    }
+    NSDictionary* iosInfo = params[@"iosInfo"];
+    if (iosInfo) {
+        linkBuilder.iOSParameters = [self getIosParameters:iosInfo];
+    }
+    NSDictionary* navigationInfo = params[@"navigationInfo"];
+    if (navigationInfo) {
+        linkBuilder.navigationInfoParameters = [self getNavigationInfoParameters:navigationInfo];
+    }
+    NSDictionary* analyticsInfo = params[@"analyticsInfo"];
+    if (analyticsInfo) {
+        NSDictionary* googlePlayAnalyticsInfo = params[@"googlePlayAnalytics"];
+        if (googlePlayAnalyticsInfo) {
+            linkBuilder.analyticsParameters = [self getGoogleAnalyticsParameters:googlePlayAnalyticsInfo];
+        }
+        NSDictionary* itunesConnectAnalyticsInfo = params[@"itunesConnectAnalytics"];
+        if (itunesConnectAnalyticsInfo) {
+            linkBuilder.iTunesConnectParameters = [self getItunesConnectAnalyticsParameters:itunesConnectAnalyticsInfo];
+        }
+    }
+    NSDictionary* socialMetaTagInfo = params[@"socialMetaTagInfo"];
+    if (socialMetaTagInfo) {
+        linkBuilder.socialMetaTagParameters = [self getSocialMetaTagParameters:socialMetaTagInfo];
+    }
+    return linkBuilder;
+}
+
+- (FIRDynamicLinkAndroidParameters*) getAndroidParameters:(NSDictionary*) androidInfo {
+    FIRDynamicLinkAndroidParameters* result = [[FIRDynamicLinkAndroidParameters alloc]
+                                     initWithPackageName:androidInfo[@"androidPackageName"]];
+    NSNumber* minimumVersion = androidInfo[@"androidMinPackageVersionCode"];
+    if (minimumVersion) {
+        result.minimumVersion = [minimumVersion intValue];
+    }
+    NSString* androidFallbackLink = androidInfo[@"androidFallbackLink"];
+    if (androidFallbackLink) {
+        result.fallbackURL = [[NSURL alloc] initWithString:androidFallbackLink];
+    }
+    return result;
+}
+
+- (FIRDynamicLinkIOSParameters*) getIosParameters:(NSDictionary*) iosInfo {
+    FIRDynamicLinkIOSParameters* result = [[FIRDynamicLinkIOSParameters alloc]
+                                 initWithBundleID:iosInfo[@"iosBundleId"]];
+    result.appStoreID = iosInfo[@"iosAppStoreId"];
+    result.iPadBundleID = iosInfo[@"iosIpadBundleId"];
+    result.minimumAppVersion = iosInfo[@"iosMinPackageVersion"];
+    NSString* iosFallbackLink = iosInfo[@"iosFallbackLink"];
+    if (iosFallbackLink) {
+        result.fallbackURL = [[NSURL alloc] initWithString:iosFallbackLink];
+    }
+    NSString* iosIpadFallbackLink = iosInfo[@"iosIpadFallbackLink"];
+    if (iosIpadFallbackLink) {
+        result.iPadFallbackURL = [[NSURL alloc] initWithString:iosIpadFallbackLink];
+    }
+    return result;
+}
+
+- (FIRDynamicLinkNavigationInfoParameters*) getNavigationInfoParameters:(NSDictionary*) navigationInfo {
+    FIRDynamicLinkNavigationInfoParameters* result = [[FIRDynamicLinkNavigationInfoParameters alloc] init];
+    NSNumber* forcedRedirectEnabled = navigationInfo[@"enableForcedRedirect"];
+    if (forcedRedirectEnabled) {
+        result.forcedRedirectEnabled = [forcedRedirectEnabled boolValue];
+    }
+    return result;
+}
+
+- (FIRDynamicLinkGoogleAnalyticsParameters*) getGoogleAnalyticsParameters:(NSDictionary*) googlePlayAnalyticsInfo {
+    FIRDynamicLinkGoogleAnalyticsParameters* result = [[FIRDynamicLinkGoogleAnalyticsParameters alloc] init];
+    result.source = googlePlayAnalyticsInfo[@"utmSource"];
+    result.medium = googlePlayAnalyticsInfo[@"utmMedium"];
+    result.campaign = googlePlayAnalyticsInfo[@"utmCampaign"];
+    result.content = googlePlayAnalyticsInfo[@"utmContent"];
+    result.term = googlePlayAnalyticsInfo[@"utmTerm"];
+    return result;
+}
+
+- (FIRDynamicLinkItunesConnectAnalyticsParameters*) getItunesConnectAnalyticsParameters:(NSDictionary*) itunesConnectAnalyticsInfo {
+    FIRDynamicLinkItunesConnectAnalyticsParameters* result = [[FIRDynamicLinkItunesConnectAnalyticsParameters alloc] init];
+    result.affiliateToken = itunesConnectAnalyticsInfo[@"at"];
+    result.campaignToken = itunesConnectAnalyticsInfo[@"ct"];
+    result.providerToken = itunesConnectAnalyticsInfo[@"pt"];
+    return result;
+}
+
+- (FIRDynamicLinkSocialMetaTagParameters*) getSocialMetaTagParameters:(NSDictionary*) socialMetaTagInfo {
+    FIRDynamicLinkSocialMetaTagParameters* result = [[FIRDynamicLinkSocialMetaTagParameters alloc] init];
+    result.title = socialMetaTagInfo[@"socialTitle"];
+    result.descriptionText = socialMetaTagInfo[@"socialDescription"];
+    NSString* socialImageLink = socialMetaTagInfo[@"socialImageLink"];
+    if (socialImageLink) {
+        result.imageURL = [[NSURL alloc] initWithString:socialImageLink];
+    }
+    return result;
 }
 
 - (void)postDynamicLink:(FIRDynamicLink*) dynamicLink {
