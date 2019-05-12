@@ -65,7 +65,7 @@ cordova.plugins.firebase.dynamiclinks.createUnguessableDynamicLink({
 ```
 
 ## Dynamic link parameters
-Any create method supports all options below to customize a returned dynamic link.
+Any create method supports all options below to customize a returned dynamic link. Parameter names has the same meaning as in the [Firebase Dynamic Links Short Links API Reference](https://firebase.google.com/docs/reference/dynamic-links/link-shortener#parameters):
 ```json
 {
   "domainUriPrefix": string,
