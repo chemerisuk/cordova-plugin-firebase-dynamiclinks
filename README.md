@@ -1,5 +1,26 @@
-# cordova-plugin-firebase-dynamiclinks<br>[![NPM version][npm-version]][npm-url] [![NPM downloads][npm-downloads]][npm-url] [![Twitter][twitter-follow]][twitter-url]
-> Cordova plugin for [Firebase Dynamic Links](https://firebase.google.com/docs/dynamic-links/)
+# Cordova plugin for [Firebase Dynamic Links](https://firebase.google.com/docs/dynamic-links/)
+
+[![NPM version][npm-version]][npm-url] [![NPM downloads][npm-downloads]][npm-url] [![Twitter][twitter-follow]][twitter-url]
+
+| [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)][donate-url] | Your help is appreciated. Create a PR, submit a bug or just grab me :beer: |
+|-|-|
+
+## Index
+
+<!-- MarkdownTOC levels="2" autolink="true" -->
+
+- [Supported Platforms](#supported-platforms)
+- [Installation](#installation)
+- [Quirks](#quirks)
+- [Methods](#methods)
+- [Dynamic link parameters](#dynamic-link-parameters)
+
+<!-- /MarkdownTOC -->
+
+## Supported Platforms
+
+- iOS
+- Android
  
 ## Installation
 
@@ -11,11 +32,7 @@ Use variable `PAGE_LINK_DOMAIN` specify your `*.page.link` domain.
 
 Use variable `FIREBASE_DYNAMIC_LINKS_VERSION` to override dependency version on Android.
 
-## Supported Platforms
-
-- iOS
-- Android
-
+## Quirks
 On Android you have to add `AndroidLaunchMode` setting in order to prevent creating of multiple app activities:
 ```xml
 <preference name="AndroidLaunchMode" value="singleTask" />
@@ -112,3 +129,4 @@ Any create method supports all options below to customize a returned dynamic lin
 [npm-downloads]: https://img.shields.io/npm/dm/cordova-plugin-firebase-dynamiclinks.svg
 [twitter-url]: https://twitter.com/chemerisuk
 [twitter-follow]: https://img.shields.io/twitter/follow/chemerisuk.svg?style=social&label=Follow%20me
+[donate-url]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=USD4VHG7CF6FN&source=url
