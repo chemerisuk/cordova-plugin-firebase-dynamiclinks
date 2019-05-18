@@ -1,4 +1,4 @@
-# cordova-plugin-firebase-dynamiclinks<br>[![NPM version][npm-version]][npm-url] [![NPM downloads][npm-downloads]][npm-url]
+# cordova-plugin-firebase-dynamiclinks<br>[![NPM version][npm-version]][npm-url] [![NPM downloads][npm-downloads]][npm-url] [![Twitter][twitter-follow]][twitter-url]
 > Cordova plugin for [Firebase Dynamic Links](https://firebase.google.com/docs/dynamic-links/)
  
 ## Installation
@@ -110,4 +110,5 @@ Any create method supports all options below to customize a returned dynamic lin
 [npm-url]: https://www.npmjs.com/package/cordova-plugin-firebase-dynamiclinks
 [npm-version]: https://img.shields.io/npm/v/cordova-plugin-firebase-dynamiclinks.svg
 [npm-downloads]: https://img.shields.io/npm/dm/cordova-plugin-firebase-dynamiclinks.svg
-
+[twitter-url]: https://twitter.com/chemerisuk
+[twitter-follow]: https://img.shields.io/twitter/follow/chemerisuk.svg?style=social&label=Follow%20me
