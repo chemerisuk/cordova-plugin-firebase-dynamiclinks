@@ -51,7 +51,7 @@ cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(data) {
 ```
 Every `create*` method accepts `dynamicLinkInfo` object as the first argument. Read section below to understand all supported [dynamic link parameters](#dynamic-link-parameters).
 
-### createDynamicLink
+### createDynamicLink(_parameters_)
 Creates a Dynamic Link from the parameters. Returns a promise fulfilled with the new dynamic link url.
 ```js
 cordova.plugins.firebase.dynamiclinks.createDynamicLink({
@@ -61,7 +61,7 @@ cordova.plugins.firebase.dynamiclinks.createDynamicLink({
 });
 ```
 
-### createShortDynamicLink
+### createShortDynamicLink(_parameters_)
 Creates a shortened Dynamic Link from the parameters. Shorten the path to a string that is only as long as needed to be unique, with a minimum length of 4 characters. Use this method if sensitive information would not be exposed if a short Dynamic Link URL were guessed.
 ```js
 cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
@@ -71,7 +71,7 @@ cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
 });
 ```
 
-### createUnguessableDynamicLink
+### createUnguessableDynamicLink(_parameters_)
 Creates a Dynamic Link from the parameters. Shorten the path to an unguessable string. Such strings are created by base62-encoding randomly generated 96-bit numbers, and consist of 17 alphanumeric characters. Use unguessable strings to prevent your Dynamic Links from being crawled, which can potentially expose sensitive information.
 ```js
 cordova.plugins.firebase.dynamiclinks.createUnguessableDynamicLink({
