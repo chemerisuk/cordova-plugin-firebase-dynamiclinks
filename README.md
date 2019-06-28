@@ -10,9 +10,16 @@
 <!-- MarkdownTOC levels="2" autolink="true" -->
 
 - [Supported Platforms](#supported-platforms)
+- [Supported Cordova Platforms](#supported-cordova-platforms)
 - [Installation](#installation)
+  - [Required Variables](#required-variables)
+  - [Optional Variables (to specify dependent library versions)](#optional-variables-to-specify-dependent-library-versions)
 - [Quirks](#quirks)
 - [Methods](#methods)
+  - [onDynamicLink(_callback_)](#ondynamiclink_callback_)
+  - [createDynamicLink(_parameters_)](#createdynamiclink_parameters_)
+  - [createShortDynamicLink(_parameters_)](#createshortdynamiclink_parameters_)
+  - [createUnguessableDynamicLink(_parameters_)](#createunguessabledynamiclink_parameters_)
 - [Dynamic link parameters](#dynamic-link-parameters)
 
 <!-- /MarkdownTOC -->
@@ -21,10 +28,20 @@
 
 - iOS
 - Android
+
+## Supported Cordova Platforms
+
+- `cordava-cli >= 9.0.0` (Hence `cordova-lib >= 9.0.0`)
+- `cordava-android >= 8.0.0`
+- `cordava-ios >= 5.0.0`
  
 ## Installation
 
-    $ cordova plugin add cordova-plugin-firebase-dynamiclinks --variable APP_DOMAIN="example.com" --variable PAGE_LINK_DOMAIN="example.page.link"
+```bash
+cordova plugin add cordova-plugin-firebase-dynamiclinks \
+    --variable APP_DOMAIN="example.com" \
+    --variable PAGE_LINK_DOMAIN="example.page.link"
+```
 
 ### Required Variables
 
