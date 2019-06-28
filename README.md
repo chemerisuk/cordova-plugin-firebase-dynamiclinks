@@ -26,11 +26,65 @@
 
     $ cordova plugin add cordova-plugin-firebase-dynamiclinks --variable APP_DOMAIN="example.com" --variable PAGE_LINK_DOMAIN="example.page.link"
 
-Use variable `APP_DOMAIN` specify web URL where your app will start an activity to handle the link.
+### Required Variables
 
-Use variable `PAGE_LINK_DOMAIN` specify your `*.page.link` domain.
+1. Use variable `APP_DOMAIN` specify web URL where your app will start an activity to handle the link.
+2. Use variable `PAGE_LINK_DOMAIN` specify your `*.page.link` domain.
 
-Use variable `FIREBASE_DYNAMIC_LINKS_VERSION` and `FIREBASE_CORE_VERSION` to override dependency version on Android.
+### Optional Variables (to specify dependent library versions)
+
+This plugin depends on various external dependencies such as Firebase SDK & other Cordova plugins which are downloaded & integrated by 
+Gradle on Android and Cocoapods on iOS. By default this plugin uses some specific versions of these external dependencies. If you want to
+ see the default versions on these dependencies, see all the `preference` available in `plugin.xml` for `<platform name="ios">` &
+`<platform name="android">`. For example:
+
+```xml
+<preference name="IOS_FIREBASE_CORE_VERSION" default="~> 6.3.0"/>
+```
+
+When you use some another Cordova plugin which uses the similar dependency as of this plugin, there will be a big chance that the 
+version in other plugin doesn't match with the version in this plugin. This will result in build failure when you use both the plugins.
+ 
+For example: This plugin uses iOS `Firebase/Core` **v6.3.0** while the [codova-plugin-fireabse-lib](https://github.com/wizpanda/cordova-plugin-firebase-lib)
+plugin uses **v5.20.2**. When you use both the plugins, you build will definitely fail as there is major difference in the dependency. To 
+fix this issue, you can override these default values at the time of plugin installation as command-line arguments:
+
+```bash
+cordova plugin add cordova-plugin-firebase-dynamiclinks --variable IOS_FIREBASE_CORE_VERSION="5.20.2"
+```
+
+Or you can specify them in `package.json` (Cordova CLI 9):
+
+```json
+{
+    "cordova": {
+        "plugins": {
+            "cordova-plugin-firebase-dynamiclinks": {
+                "APP_DOMAIN": "example.com",
+                "PAGE_LINK_DOMAIN": "example.page.link",
+                "IOS_FIREBASE_CORE_VERSION": "5.20.2"
+            }
+        }
+    }
+}
+```
+
+Following are all the plugin variables which can be used to specify external dependencies:
+
+**Android Gradle dependencies:**
+
+- `ANDROID_FIREBASE_CORE_VERSION` for `com.google.firebase:firebase-core`
+- `ANDROID_FIREBASE_DYNAMIC_LINKS_VERSION` for `com.google.firebase:firebase-dynamic-links`
+
+**Android Cordova plugin dependencies:**
+
+- `ANDROID_SUPPORT_CORDOVA_PLUGIN_VERSION` for `cordova-support-android-plugin`
+- `ANDROID_SUPPORT_GOOGLE_SERVICES_VERSION` for `cordova-support-google-services`
+
+**iOS Cocoapods dependencies:**
+
+- `IOS_FIREBASE_CORE_VERSION` for `Firebase/Core`
+- `IOS_FIREBASE_DYNAMIC_LINKS_VERSION` for `Firebase/DynamicLinks`
 
 ## Quirks
 On Android you have to add `AndroidLaunchMode` setting in order to prevent creating of multiple app activities:
