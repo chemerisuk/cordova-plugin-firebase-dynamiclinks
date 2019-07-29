@@ -18,6 +18,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <merges target="cordova.plugins.firebase.dynamiclinks" />
     </js-module>
 
+    <hook type="before_plugin_install" src="hooks/handle_google_services.js" />
+    <hook type="after_plugin_install" src="hooks/google_services_cleanup.js" />
+
     <preference name="APP_DOMAIN" />
     <preference name="PAGE_LINK_DOMAIN" />
 
