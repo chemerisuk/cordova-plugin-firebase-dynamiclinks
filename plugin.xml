@@ -111,7 +111,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <framework src="src/ios/GoogleUtilities.framework" custom="true" embed="false" />
         <framework src="src/ios/nanopb.framework" custom="true" embed="false" />
 
-        <podspec>
+        <!-- <podspec>
             <config>
                 <source url="https://github.com/CocoaPods/Specs.git"/>
             </config>
@@ -119,7 +119,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 <pod name="Firebase/Core" spec="~> 6.3.0" />
                 <pod name="Firebase/DynamicLinks" spec="~> 6.3.0" />
             </pods>
-        </podspec>
+        </podspec> -->
     </platform>
 
 </plugin>
