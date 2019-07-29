@@ -9,9 +9,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <keywords>cordova</keywords>
 
     <engines>
-        <engine name="cordova" version=">=9.0.0"/>
+        <engine name="cordova" version=">=7.1.0"/>
         <engine name="cordova-android" version=">=8.0.0"/>
-        <engine name="cordova-ios" version=">=5.0.0"/>
+        <engine name="cordova-ios" version=">=4.5.5"/>
     </engines>
 
     <js-module name="FirebaseDynamicLinks" src="www/FirebaseDynamicLinks.js">
@@ -99,6 +99,17 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/AppDelegate+FirebaseDynamicLinksPlugin.m" />
         <header-file src="src/ios/FirebaseDynamicLinksPlugin.h" />
         <source-file src="src/ios/FirebaseDynamicLinksPlugin.m" />
+
+        <header-file src="src/ios/Firebase.h" />
+        <framework src="src/ios/FirebaseDynamicLinks.framework" custom="true" embed="false" />
+        <framework src="src/ios/FIRAnalyticsConnector.framework" custom="true" embed="false" />
+        <framework src="src/ios/FirebaseAnalytics.framework" custom="true" embed="false" />
+        <framework src="src/ios/FirebaseCore.framework" custom="true" embed="false" />
+        <framework src="src/ios/FirebaseCoreDiagnostics.framework" custom="true" embed="false" />
+        <framework src="src/ios/FirebaseInstanceID.framework" custom="true" embed="false" />
+        <framework src="src/ios/GoogleAppMeasurement.framework" custom="true" embed="false" />
+        <framework src="src/ios/GoogleUtilities.framework" custom="true" embed="false" />
+        <framework src="src/ios/nanopb.framework" custom="true" embed="false" />
 
         <podspec>
             <config>
