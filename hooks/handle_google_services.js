@@ -68,7 +68,8 @@ function getGoogleServiceTargetDir(context) {
             }
         }
         case "ios":
-            return platformPath;
+            return context.opts.plugin.dir;
+            // return platformPath;
         default:
             return undefined;
     }
@@ -108,6 +109,7 @@ function copyGoogleServiceOnIos(sourceDir, targetDir) {
     try {
         var sourceFilePath = path.join(sourceDir, "GoogleService-Info.plist");
         var targetFilePath = path.join(targetDir, "GoogleService-Info.plist");
+        console.log("copyGoogleServiceOnIos: ", targetFilePath);
         fs.copyFileSync(sourceFilePath, targetFilePath);
         return true;
     } catch (error) {
@@ -123,7 +125,7 @@ module.exports = function(context) {
 
         var prefZipFilename = "google-services";
         var zipFile = getZipFile(configPath, prefZipFilename);
-
+        console.log("zipFile: ", zipFile);
         // if zip file is present, lets unzip it!
         if (!zipFile) {
             return reject(

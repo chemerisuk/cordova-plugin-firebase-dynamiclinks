@@ -102,8 +102,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/AppDelegate+FirebaseDynamicLinksPlugin.m" />
         <header-file src="src/ios/FirebaseDynamicLinksPlugin.h" />
         <source-file src="src/ios/FirebaseDynamicLinksPlugin.m" />
-
         <header-file src="src/ios/Firebase.h" />
+
+        <resource-file src="GoogleService-Info.plist" />
         <framework src="src/ios/FirebaseDynamicLinks.framework" custom="true" embed="false" />
         <framework src="src/ios/FIRAnalyticsConnector.framework" custom="true" embed="false" />
         <framework src="src/ios/FirebaseAnalytics.framework" custom="true" embed="false" />
@@ -113,6 +114,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <framework src="src/ios/GoogleAppMeasurement.framework" custom="true" embed="false" />
         <framework src="src/ios/GoogleUtilities.framework" custom="true" embed="false" />
         <framework src="src/ios/nanopb.framework" custom="true" embed="false" />
+
+        <dependency id="cordova-support-google-services" version="^1.3.0"/>
 
         <!-- <podspec>
             <config>
