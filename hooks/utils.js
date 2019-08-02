@@ -13,8 +13,9 @@ function getPlatformVersion(context) {
         "platforms.json"
     );
     var platforms = require(platformsJsonFile);
-    var platform = context.opts.plugin.platform;
-    return platforms[platform];
+    var platform = context.opts.cordova.version;
+    return platform;
+    //return platforms[platform];
 }
 
 function rmNonEmptyDir(dir_path) {
@@ -57,6 +58,7 @@ function getWwwPath(context) {
     var wwwfolder;
     if (platform === "android") {
         var platformVersion = getPlatformVersion(context);
+        console.log("platformVersion: ", platformVersion);
         if (platformVersion >= "7") {
             wwwfolder = "app/src/main/assets/www";
         } else {
