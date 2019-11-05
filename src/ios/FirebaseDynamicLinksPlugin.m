@@ -12,19 +12,6 @@
     self.domainUriPrefix = [self.commandDelegate.settings objectForKey:[@"DYNAMIC_LINK_URIPREFIX" lowercaseString]];
 }
 
-- (void)handleOpenURL:(NSNotification*)notification {
-    NSURL* url = [notification object];
-
-    if ([url isKindOfClass:[NSURL class]]) {
-        FIRDynamicLink* dynamicLink =
-        [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:url];
-
-        if (dynamicLink) {
-            [self postDynamicLink:dynamicLink];
-        }
-    }
-}
-
 - (void)onDynamicLink:(CDVInvokedUrlCommand *)command {
     self.dynamicLinkCallbackId = command.callbackId;
 
