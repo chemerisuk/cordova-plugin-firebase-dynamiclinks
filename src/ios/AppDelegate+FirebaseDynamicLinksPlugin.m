@@ -49,7 +49,7 @@
         handled = YES;
     }
     // always call original method implementation
-    return [self identity_application:app openURL:url options:options] || handled;
+    return handled || [self identity_application:app openURL:url options:options];
 }
 
 - (BOOL)identity_application:(UIApplication *)app continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
@@ -69,7 +69,7 @@
             }
         }];
     // always call original method implementation
-    return [self identity_application:app continueUserActivity:userActivity restorationHandler:restorationHandler] || handled;
+    return handled || [self identity_application:app continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
 @end
