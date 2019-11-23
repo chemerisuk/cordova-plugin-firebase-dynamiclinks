@@ -4,58 +4,58 @@
 
 
 @implementation AppDelegate (FirebaseDynamicLinksPlugin)
-// Borrowed from http://nshipster.com/method-swizzling/
+
 + (void)load {
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{
-        [self exchange:@selector(application:continueUserActivity:restorationHandler:)
-    withSwizzled:@selector(identity_application:continueUserActivity:restorationHandler:)];
-
-        [self exchange:@selector(application:openURL:options:)
-        withSwizzled:@selector(identity_application:openURL:options:)];
+        [self swizzleMethod:@selector(application:openURL:options:)];
+        [self swizzleMethod:@selector(application:continueUserActivity:restorationHandler:)];
     });
 }
 
-+ (void)exchange:(SEL)originalSelector withSwizzled:(SEL)swizzledSelector {
++ (void)swizzleMethod:(SEL)originalSelector {
     Class class = [self class];
+    NSString *selectorString = NSStringFromSelector(originalSelector);
+    SEL newSelector = NSSelectorFromString([@"swizzled_" stringByAppendingString:selectorString]);
+    SEL defaultSelector = NSSelectorFromString([@"default_" stringByAppendingString:selectorString]);
     Method originalMethod = class_getInstanceMethod(class, originalSelector);
-    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-
-    BOOL didAddMethod =
-    class_addMethod(class,
-                    originalSelector,
-                    method_getImplementation(swizzledMethod),
-                    method_getTypeEncoding(swizzledMethod));
-
-    if (didAddMethod) {
-        class_replaceMethod(class,
-                            swizzledSelector,
-                            method_getImplementation(originalMethod),
-                            method_getTypeEncoding(originalMethod));
+    Method newMethod = class_getInstanceMethod(class, newSelector);
+    Method noopMethod = class_getInstanceMethod(class, defaultSelector);
+    if (class_addMethod(class, originalSelector, method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) {
+        class_replaceMethod(class, newSelector, method_getImplementation(originalMethod ?: noopMethod), method_getTypeEncoding(originalMethod));
     } else {
-        method_exchangeImplementations(originalMethod, swizzledMethod);
+        method_exchangeImplementations(originalMethod, newMethod);
     }
 }
 
-- (BOOL)identity_application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *, id> *)options {
+- (BOOL)default_application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *, id> *)options {
+    return FALSE;
+}
+
+- (BOOL)swizzled_application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *, id> *)options {
+    // always call original method implementation first
+    BOOL handled = [self swizzled_application:app openURL:url options:options];
     FirebaseDynamicLinksPlugin* dl = [self.viewController getCommandInstance:@"FirebaseDynamicLinks"];
+    // parse firebase dynamic link
     FIRDynamicLink *dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:url];
-
-    BOOL handled = NO;
-
     if (dynamicLink) {
         [dl postDynamicLink:dynamicLink];
-        handled = YES;
+        handled = TRUE;
     }
-    // always call original method implementation
-    return [self identity_application:app openURL:url options:options] || handled;
+    return handled;
 }
 
-- (BOOL)identity_application:(UIApplication *)app continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
-    FirebaseDynamicLinksPlugin* dl = [self.viewController getCommandInstance:@"FirebaseDynamicLinks"];
+- (BOOL)default_application:(UIApplication *)app continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
+    return FALSE;
+}
 
-    BOOL handled = [[FIRDynamicLinks dynamicLinks]
+- (BOOL)swizzled_application:(UIApplication *)app continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
+    // always call original method implementation first
+    BOOL handled = [self swizzled_application:app continueUserActivity:userActivity restorationHandler:restorationHandler];
+    FirebaseDynamicLinksPlugin* dl = [self.viewController getCommandInstance:@"FirebaseDynamicLinks"];
+    // handle firebase dynamic link
+    return [[FIRDynamicLinks dynamicLinks]
         handleUniversalLink:userActivity.webpageURL
         completion:^(FIRDynamicLink * _Nullable dynamicLink, NSError * _Nullable error) {
             // Try this method as some dynamic links are not recognize by handleUniversalLink
@@ -67,9 +67,7 @@
             if (dynamicLink) {
                 [dl postDynamicLink:dynamicLink];
             }
-        }];
-    // always call original method implementation
-    return [self identity_application:app continueUserActivity:userActivity restorationHandler:restorationHandler] || handled;
+        }] || handled;
 }
 
 @end
