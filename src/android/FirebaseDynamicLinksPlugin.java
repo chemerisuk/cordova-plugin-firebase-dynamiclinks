@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters;
 import com.google.firebase.dynamiclinks.DynamicLink.GoogleAnalyticsParameters;
@@ -78,23 +79,31 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
 
     private void respondWithDynamicLink(Intent intent) {
         this.firebaseDynamicLinks.getDynamicLink(intent)
-                .continueWith(new Continuation<PendingDynamicLinkData, JSONObject>() {
+                .addOnSuccessListener(new OnSuccessListener<PendingDynamicLinkData>() {
                     @Override
-                    public JSONObject then(Task<PendingDynamicLinkData> task) throws JSONException {
-                        PendingDynamicLinkData data = task.getResult();
+                    public void onSuccess(PendingDynamicLinkData data) {
+                        try {
+                            JSONObject result = new JSONObject();
 
-                        JSONObject result = new JSONObject();
-                        result.put("deepLink", data.getLink());
-                        result.put("clickTimestamp", data.getClickTimestamp());
-                        result.put("minimumAppVersion", data.getMinimumAppVersion());
+                            if (data == null || data.getLink() == null) {
+                                result.put("hasDeepLink", false);
+                            } else {
+                                result.put("hasDeepLink", true);
+                                result.put("deepLink", data.getLink());
+                                result.put("clickTimestamp", data.getClickTimestamp());
+                                result.put("minimumAppVersion", data.getMinimumAppVersion());
+                            }
 
-                        if (dynamicLinkCallback != null) {
-                            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
-                            pluginResult.setKeepCallback(true);
-                            dynamicLinkCallback.sendPluginResult(pluginResult);
+                            result.put("launchURL", intent.getDataString());
+
+                            if (dynamicLinkCallback != null) {
+                                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
+                                pluginResult.setKeepCallback(true);
+                                dynamicLinkCallback.sendPluginResult(pluginResult);
+                            }
+                        } catch (JSONException exception) {
+                            Log.e(TAG, "Error occurred while instantiating JSONObject", exception);
                         }
-
-                        return result;
                     }
                 });
     }
