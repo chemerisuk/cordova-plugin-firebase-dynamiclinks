@@ -2,8 +2,8 @@ var exec = require("cordova/exec");
 var PLUGIN_NAME = "FirebaseDynamicLinks";
 
 module.exports = {
-    onDynamicLink: function(onSuccess, onError) {
-        exec(onSuccess, onError, PLUGIN_NAME, "onDynamicLink", []);
+    onDynamicLink: function(onSuccess, onError, alwaysGiveCallback) {
+        exec(onSuccess, onError, PLUGIN_NAME, "onDynamicLink", [{alwaysGiveCallback: alwaysGiveCallback}]);
     },
     createDynamicLink: function(params) {
         return new Promise(function(resolve, reject) {

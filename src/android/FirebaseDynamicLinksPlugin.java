@@ -46,15 +46,16 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
     @Override
     public void onNewIntent(Intent intent) {
         if (this.dynamicLinkCallback != null) {
-            respondWithDynamicLink(intent);
+            respondWithDynamicLink(intent, false);
         }
     }
 
     @CordovaMethod
-    private void onDynamicLink(CallbackContext callbackContext) {
+    private void onDynamicLink(JSONObject params, CallbackContext callbackContext) throws JSONException {
         this.dynamicLinkCallback = callbackContext;
+        Boolean alwaysGiveCallback = params.getBoolean("alwaysGiveCallback");
 
-        respondWithDynamicLink(cordova.getActivity().getIntent());
+        respondWithDynamicLink(cordova.getActivity().getIntent(), alwaysGiveCallback);
     }
 
     @CordovaMethod(ExecutionThread.WORKER)
@@ -77,15 +78,20 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
         }
     }
 
-    private void respondWithDynamicLink(Intent intent) {
+    private void respondWithDynamicLink(Intent intent, Boolean alwaysGiveCallback) {
         this.firebaseDynamicLinks.getDynamicLink(intent)
                 .addOnSuccessListener(new OnSuccessListener<PendingDynamicLinkData>() {
                     @Override
                     public void onSuccess(PendingDynamicLinkData data) {
                         try {
+                            Boolean noPendingData = data == null || data.getLink() == null;
+                            if (noPendingData && !alwaysGiveCallback) {
+                                return;
+                            }
+
                             JSONObject result = new JSONObject();
 
-                            if (data == null || data.getLink() == null) {
+                            if (noPendingData) {
                                 result.put("hasDeepLink", false);
                             } else {
                                 result.put("hasDeepLink", true);
@@ -93,8 +99,6 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
                                 result.put("clickTimestamp", data.getClickTimestamp());
                                 result.put("minimumAppVersion", data.getMinimumAppVersion());
                             }
-
-                            result.put("launchURL", intent.getDataString());
 
                             if (dynamicLinkCallback != null) {
                                 PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
