@@ -18,7 +18,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <merges target="cordova.plugins.firebase.dynamiclinks" />
     </js-module>
 
-    <preference name="APP_DOMAIN" />
     <preference name="PAGE_LINK_DOMAIN" />
 
     <platform name="android">
@@ -33,13 +32,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="$APP_DOMAIN" android:scheme="http"/>
-                <data android:host="$APP_DOMAIN" android:scheme="https"/>
-            </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -83,14 +75,12 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <config-file target="*-Debug.plist" parent="com.apple.developer.associated-domains">
             <array>
-                <string>applinks:$APP_DOMAIN</string>
                 <string>applinks:$PAGE_LINK_DOMAIN</string>
             </array>
         </config-file>
 
         <config-file target="*-Release.plist" parent="com.apple.developer.associated-domains">
             <array>
-                <string>applinks:$APP_DOMAIN</string>
                 <string>applinks:$PAGE_LINK_DOMAIN</string>
             </array>
         </config-file>
