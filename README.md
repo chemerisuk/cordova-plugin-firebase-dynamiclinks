@@ -28,7 +28,7 @@
 
 Use variable `PAGE_LINK_DOMAIN` specify your `*.page.link` domain.
 
-Use variable `FIREBASE_DYNAMIC_LINKS_VERSION` and `FIREBASE_ANALYTICS_VERSION` to override dependency version on Android.
+Use variable `FIREBASE_DYNAMIC_LINKS_VERSION` to override dependency version on Android.
 
 ## Quirks
 On Android you have to add `AndroidLaunchMode` setting in order to prevent creating of multiple app activities:
