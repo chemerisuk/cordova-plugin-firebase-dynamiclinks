@@ -24,7 +24,7 @@
  
 ## Installation
 
-    $ cordova plugin add cordova-plugin-firebase-dynamiclinks --variable --variable PAGE_LINK_DOMAIN="mydomain.page.link"
+    $ cordova plugin add cordova-plugin-firebase-dynamiclinks --variable PAGE_LINK_DOMAIN="mydomain.page.link"
 
 Use variable `PAGE_LINK_DOMAIN` specify your `*.page.link` domain.
 
@@ -36,7 +36,7 @@ On Android you have to add `AndroidLaunchMode` setting in order to prevent creat
 <preference name="AndroidLaunchMode" value="singleTask" />
 ```
 
-Firebase Dynamic Links SDK has an [unresolved bug](https://github.com/firebase/firebase-ios-sdk/issues/233) related to parsing `deepLink` for new app installs. In order to get it work your dynamic link MUST have an [app preview page](https://firebase.google.com/docs/dynamic-links/link-previews), which by default.
+To get callback for new app installs on iOS your dynamic link MUST have an [app preview page](https://firebase.google.com/docs/dynamic-links/link-previews), which is by default.
 
 ## Methods
 
