@@ -81,6 +81,7 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
                 .continueWith(new Continuation<PendingDynamicLinkData, JSONObject>() {
                     @Override
                     public JSONObject then(Task<PendingDynamicLinkData> task) throws JSONException {
+                        intent.setData(null);
                         PendingDynamicLinkData data = task.getResult();
 
                         JSONObject result = new JSONObject();
