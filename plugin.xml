@@ -20,7 +20,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
     <preference name="PAGE_LINK_DOMAIN" />
 
-    <dependency id="cordova-plugin-firebase-analytics" version="~4.4.2"/>
+    <dependency id="cordova-plugin-firebase-analytics" version="~4.5.0"/>
 
     <platform name="android">
         <preference name="ANDROID_FIREBASE_DYNAMICLINKS_VERSION" default="19.1.+"/>
@@ -51,7 +51,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     </platform>
 
     <platform name="ios">
-        <preference name="IOS_FIREBASE_DYNAMICLINKS_VERSION" default="~> 6.31.0"/>
+        <preference name="IOS_FIREBASE_DYNAMICLINKS_VERSION" default="~> 6.32.2"/>
 
         <config-file parent="/*" target="config.xml">
             <preference name="DYNAMIC_LINK_URIPREFIX" value="https://$PAGE_LINK_DOMAIN"/>
