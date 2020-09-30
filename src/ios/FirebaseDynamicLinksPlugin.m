@@ -9,7 +9,7 @@
         [FIRApp configure];
     }
 
-    self.domainUriPrefix = [self.commandDelegate.settings objectForKey:[@"DYNAMIC_LINK_URIPREFIX" lowercaseString]];
+    self.domainUriPrefix = [self.commandDelegate.settings objectForKey:[@"DOMAIN_URI_PREFIX" lowercaseString]];
 }
 
 - (void)onDynamicLink:(CDVInvokedUrlCommand *)command {

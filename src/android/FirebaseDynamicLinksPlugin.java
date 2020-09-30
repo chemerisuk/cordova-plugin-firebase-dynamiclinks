@@ -39,7 +39,7 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
         Log.d(TAG, "Starting Firebase Dynamic Links plugin");
 
         this.firebaseDynamicLinks = FirebaseDynamicLinks.getInstance();
-        this.domainUriPrefix = this.preferences.getString("DYNAMIC_LINK_URIPREFIX", "");
+        this.domainUriPrefix = this.preferences.getString("DOMAIN_URI_PREFIX", "");
     }
 
     @Override
