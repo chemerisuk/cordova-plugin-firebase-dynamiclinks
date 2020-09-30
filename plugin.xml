@@ -93,9 +93,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/FirebaseDynamicLinksPlugin.m" />
 
         <podspec>
-            <config>
-                <source url="https://cdn.cocoapods.org/"/>
-            </config>
             <pods>
                 <pod name="Firebase/DynamicLinks" spec="$IOS_FIREBASE_DYNAMICLINKS_VERSION" />
             </pods>
