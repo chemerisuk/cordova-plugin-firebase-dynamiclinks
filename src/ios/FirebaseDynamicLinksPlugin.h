@@ -5,6 +5,7 @@
 
 @interface FirebaseDynamicLinksPlugin : CDVPlugin
 
+- (void)getDynamicLink:(CDVInvokedUrlCommand *)command;
 - (void)onDynamicLink:(CDVInvokedUrlCommand *)command;
 - (void)createDynamicLink:(CDVInvokedUrlCommand *)command;
 - (void)postDynamicLink:(FIRDynamicLink*) dynamicLink;

@@ -12,16 +12,20 @@
     self.domainUriPrefix = [self.commandDelegate.settings objectForKey:[@"DOMAIN_URI_PREFIX" lowercaseString]];
 }
 
-- (void)onDynamicLink:(CDVInvokedUrlCommand *)command {
-    self.dynamicLinkCallbackId = command.callbackId;
-
+- (void)getDynamicLink:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult *pluginResult;
     if (self.lastDynamicLinkData) {
-        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:self.lastDynamicLinkData];
-        [pluginResult setKeepCallbackAsBool:YES];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.dynamicLinkCallbackId];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:self.lastDynamicLinkData];
 
         self.lastDynamicLinkData = nil;
+    } else {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:nil];
     }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)onDynamicLink:(CDVInvokedUrlCommand *)command {
+    self.dynamicLinkCallbackId = command.callbackId;
 }
 
 - (void)createDynamicLink:(CDVInvokedUrlCommand *)command {

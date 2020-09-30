@@ -44,16 +44,19 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
 
     @Override
     public void onNewIntent(Intent intent) {
-        if (this.dynamicLinkCallback != null) {
-            respondWithDynamicLink(intent);
+        if (dynamicLinkCallback != null) {
+            respondWithDynamicLink(intent, dynamicLinkCallback);
         }
     }
 
     @CordovaMethod
-    private void onDynamicLink(CallbackContext callbackContext) {
-        this.dynamicLinkCallback = callbackContext;
+    private void getDynamicLink(CallbackContext callbackContext) {
+        respondWithDynamicLink(cordova.getActivity().getIntent(), callbackContext);
+    }
 
-        respondWithDynamicLink(cordova.getActivity().getIntent());
+    @CordovaMethod
+    private void onDynamicLink(CallbackContext callbackContext) {
+        dynamicLinkCallback = callbackContext;
     }
 
     @CordovaMethod(ExecutionThread.WORKER)
@@ -76,7 +79,7 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
         }
     }
 
-    private void respondWithDynamicLink(Intent intent) {
+    private void respondWithDynamicLink(Intent intent, final CallbackContext callbackContext) {
         this.firebaseDynamicLinks.getDynamicLink(intent)
                 .continueWith(new Continuation<PendingDynamicLinkData, JSONObject>() {
                     @Override
@@ -88,13 +91,21 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
                         result.put("clickTimestamp", data.getClickTimestamp());
                         result.put("minimumAppVersion", data.getMinimumAppVersion());
 
-                        if (dynamicLinkCallback != null) {
+                        if (callbackContext != null) {
                             PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
-                            pluginResult.setKeepCallback(true);
-                            dynamicLinkCallback.sendPluginResult(pluginResult);
+                            pluginResult.setKeepCallback(callbackContext == dynamicLinkCallback);
+                            callbackContext.sendPluginResult(pluginResult);
                         }
 
                         return result;
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(Exception e) {
+                        if (callbackContext != null && callbackContext != dynamicLinkCallback) {
+                            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, (String)null));
+                        }
                     }
                 });
     }
