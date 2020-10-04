@@ -94,7 +94,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <podspec>
             <config>
-                <source url="https://github.com/CocoaPods/Specs.git" />
+                <source url="https://cdn.cocoapods.org/" />
             </config>
             <pods>
                 <pod name="Firebase/DynamicLinks" spec="$IOS_FIREBASE_DYNAMICLINKS_VERSION" />
