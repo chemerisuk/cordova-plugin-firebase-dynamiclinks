@@ -19,6 +19,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     </js-module>
 
     <preference name="PAGE_LINK_DOMAIN" />
+    <preference name="PAGE_LINK_PATHPREFIX" default="" />
 
     <dependency id="cordova-plugin-firebase-analytics" version="~4.5.0"/>
 
@@ -37,8 +38,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="$PAGE_LINK_DOMAIN" android:scheme="http"/>
-                <data android:host="$PAGE_LINK_DOMAIN" android:scheme="https"/>
+                <data android:host="$PAGE_LINK_DOMAIN" android:pathPrefix="/$PAGE_LINK_PATHPREFIX" android:scheme="http"/>
+                <data android:host="$PAGE_LINK_DOMAIN" android:pathPrefix="/$PAGE_LINK_PATHPREFIX" android:scheme="https"/>
             </intent-filter>
         </config-file>
 
