@@ -33,5 +33,6 @@
   "bugs": {
     "url": "https://github.com/chemerisuk/cordova-plugin-firebase-dynamiclinks/issues"
   },
-  "homepage": "https://github.com/chemerisuk/cordova-plugin-firebase-dynamiclinks#readme"
+  "homepage": "https://github.com/chemerisuk/cordova-plugin-firebase-dynamiclinks#readme",
+  "funding": "https://github.com/chemerisuk/cordova-plugin-firebase-dynamiclinks?sponsor=1"
 }
