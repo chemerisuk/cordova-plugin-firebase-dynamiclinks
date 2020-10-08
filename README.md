@@ -2,9 +2,6 @@
 
 [![NPM version][npm-version]][npm-url] [![NPM downloads][npm-downloads]][npm-url] [![PayPal donate](https://img.shields.io/badge/paypal-donate-ff69b4?logo=paypal)][donate-url] [![Twitter][twitter-follow]][twitter-url]
 
-| [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)][donate-url] | Your help is appreciated. Create a PR, submit a bug or just grab me :beer: |
-|-|-|
-
 ## Index
 
 <!-- MarkdownTOC levels="2" autolink="true" -->
@@ -39,6 +36,18 @@ On Android you have to add `AndroidLaunchMode` setting in order to prevent creat
 To get callback for new app installs on iOS your dynamic link MUST have an [app preview page](https://firebase.google.com/docs/dynamic-links/link-previews), which is by default.
 
 ## Methods
+
+### getDynamicLink
+Determines if the app has a pending dynamic link and provide access to the dynamic link parameters.
+```js
+cordova.plugins.firebase.dynamiclinks.getDynamicLink().then(function(data) {
+    if (data) {
+        console.log("Read dynamic link data on app start:", data);
+    } else {
+        console.log("App wasn't started from a dynamic link");
+    }
+});
+``` 
 
 ### onDynamicLink(_callback_)
 Registers callback that is triggered on each dynamic link click.
