@@ -18,8 +18,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <merges target="cordova.plugins.firebase.dynamiclinks" />
     </js-module>
 
-    <preference name="PAGE_LINK_DOMAIN" />
-    <preference name="PAGE_LINK_PATHPREFIX" default="" />
+    <preference name="APP_DOMAIN_NAME" />
+    <preference name="APP_DOMAIN_PATH" default="/" />
 
     <dependency id="cordova-plugin-firebase-analytics" version="~4.5.0"/>
 
@@ -27,7 +27,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <preference name="ANDROID_FIREBASE_DYNAMICLINKS_VERSION" default="19.1.+"/>
 
         <config-file parent="/*" target="res/xml/config.xml">
-            <preference name="DOMAIN_URI_PREFIX" value="https://$PAGE_LINK_DOMAIN"/>
+            <preference name="DOMAIN_URI_PREFIX" value="https://$APP_DOMAIN_NAME"/>
             <feature name="FirebaseDynamicLinks">
                 <param name="android-package" value="by.chemerisuk.cordova.firebase.FirebaseDynamicLinksPlugin" />
             </feature>
@@ -38,8 +38,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="$PAGE_LINK_DOMAIN" android:pathPrefix="/$PAGE_LINK_PATHPREFIX" android:scheme="http"/>
-                <data android:host="$PAGE_LINK_DOMAIN" android:pathPrefix="/$PAGE_LINK_PATHPREFIX" android:scheme="https"/>
+                <data android:host="$APP_DOMAIN_NAME" android:pathPrefix="$APP_DOMAIN_PATH" android:scheme="http"/>
+                <data android:host="$APP_DOMAIN_NAME" android:pathPrefix="$APP_DOMAIN_PATH" android:scheme="https"/>
             </intent-filter>
         </config-file>
 
@@ -55,7 +55,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <preference name="IOS_FIREBASE_DYNAMICLINKS_VERSION" default="~> 6.32.2"/>
 
         <config-file parent="/*" target="config.xml">
-            <preference name="DOMAIN_URI_PREFIX" value="https://$PAGE_LINK_DOMAIN"/>
+            <preference name="DOMAIN_URI_PREFIX" value="https://$APP_DOMAIN_NAME"/>
             <feature name="FirebaseDynamicLinks">
                 <param name="ios-package" value="FirebaseDynamicLinksPlugin" />
             </feature>
@@ -78,20 +78,20 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <config-file target="*-Info.plist" parent="FirebaseDynamicLinksCustomDomains">
             <array>
-                <string>http://$PAGE_LINK_DOMAIN/PAGE_LINK_PATHPREFIX</string>
-                <string>https://$PAGE_LINK_DOMAIN/PAGE_LINK_PATHPREFIX</string>
+                <string>http://$APP_DOMAIN_NAME$APP_DOMAIN_PATH</string>
+                <string>https://$APP_DOMAIN_NAME$APP_DOMAIN_PATH</string>
             </array>
         </config-file>
 
         <config-file target="*-Debug.plist" parent="com.apple.developer.associated-domains">
             <array>
-                <string>applinks:$PAGE_LINK_DOMAIN</string>
+                <string>applinks:$APP_DOMAIN_NAME</string>
             </array>
         </config-file>
 
         <config-file target="*-Release.plist" parent="com.apple.developer.associated-domains">
             <array>
-                <string>applinks:$PAGE_LINK_DOMAIN</string>
+                <string>applinks:$APP_DOMAIN_NAME</string>
             </array>
         </config-file>
 
