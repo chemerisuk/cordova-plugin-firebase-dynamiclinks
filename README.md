@@ -24,9 +24,13 @@
  
 ## Installation
 
-    $ cordova plugin add cordova-plugin-firebase-dynamiclinks --variable PAGE_LINK_DOMAIN="mydomain.page.link"
+    $ cordova plugin add cordova-plugin-firebase-dynamiclinks --variable APP_DOMAIN_NAME="mydomain.page.link"
 
-Use variable `PAGE_LINK_DOMAIN` specify your `*.page.link` domain.
+Use variable `APP_DOMAIN_NAME` to specify your Google generated `*.page.link` domain or other custom domain.
+
+    $ cordova plugin add cordova-plugin-firebase-dynamiclinks --variable APP_DOMAIN_NAME="mydomain.com" APP_DOMAIN_PATH="/app1"
+
+Use variables `APP_DOMAIN_PATH` to speciy a specific domain path prefix when using a custom domain. This is useful if multiple apps share the same root level domain. If specified this path **must** begin with a `/`.
 
 Use variables `IOS_FIREBASE_DYNAMICLINKS_VERSION` and `ANDROID_FIREBASE_DYNAMICLINKS_VERSION` to override dependency versions for Firebase SDKs.
 
