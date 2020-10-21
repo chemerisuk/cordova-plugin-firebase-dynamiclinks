@@ -1,6 +1,6 @@
 # Cordova plugin for [Firebase Dynamic Links](https://firebase.google.com/docs/dynamic-links/)
 
-[![NPM version][npm-version]][npm-url] [![NPM downloads][npm-downloads]][npm-url] [![PayPal donate](https://img.shields.io/badge/paypal-donate-ff69b4?logo=paypal)][donate-url] [![Twitter][twitter-follow]][twitter-url]
+[![NPM version][npm-version]][npm-url] [![NPM downloads][npm-downloads]][npm-url] [![NPM total downloads][npm-total-downloads]][npm-url] [![PayPal donate](https://img.shields.io/badge/paypal-donate-ff69b4?logo=paypal)][donate-url] [![Twitter][twitter-follow]][twitter-url]
 
 ## Index
 
@@ -138,6 +138,7 @@ Any create method supports all options below to customize a returned dynamic lin
 [npm-url]: https://www.npmjs.com/package/cordova-plugin-firebase-dynamiclinks
 [npm-version]: https://img.shields.io/npm/v/cordova-plugin-firebase-dynamiclinks.svg
 [npm-downloads]: https://img.shields.io/npm/dm/cordova-plugin-firebase-dynamiclinks.svg
+[npm-total-downloads]: https://img.shields.io/npm/dt/cordova-plugin-firebase-dynamiclinks.svg?label=total+downloads
 [twitter-url]: https://twitter.com/chemerisuk
 [twitter-follow]: https://img.shields.io/twitter/follow/chemerisuk.svg?style=social&label=Follow%20me
 [donate-url]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=USD4VHG7CF6FN&source=url
