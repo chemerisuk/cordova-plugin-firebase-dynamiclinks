@@ -174,6 +174,14 @@
     [data setObject:(minimumAppVersion ? minimumAppVersion : @"") forKey:@"minimumAppVersion"];
     [data setObject:(weakConfidence ? @"Weak" : @"Strong") forKey:@"matchType"];
 
+    // Hathway code change made to avoid a "phantom" empty deeplink from clobbering a valid deeplink on first launch after install.
+    // The incoming phantom deeplink seems to be associated with a JS script being run to detect the device locale, but
+    //  there doesn't seem to be a way to prevent that from running
+    // First identified in ticket PRG-1613
+    if ([[data objectForKey:@"deepLink"] isEqualToString:@""]) {
+        return;
+    }
+
     if (self.dynamicLinkCallbackId) {
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:data];
         [pluginResult setKeepCallbackAsBool:YES];
