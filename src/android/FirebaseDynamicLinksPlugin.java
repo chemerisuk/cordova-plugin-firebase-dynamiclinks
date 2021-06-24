@@ -94,7 +94,7 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
                         
 			// Hathaway code (Java version) change made to avoid a "phantom" empty deeplink from clobbering a valid deeplink on first launch. Refer to ticket PRG-1613
 			if (data.getLink().equals("")){
-				return;
+				return new JSONObject();
 			}
 
                         if (callbackContext != null) {
