@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-firebase-dynamiclinks",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Cordova plugin for Firebase Dynamic Links",
   "cordova": {
     "id": "cordova-plugin-firebase-dynamiclinks",
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/chemerisuk/cordova-plugin-firebase-dynamiclinks.git"
   },
   "scripts": {
-    "version": "replace -s 'version=\"(.+)(?=\">)' 'version=\"'$npm_package_version plugin.xml && git add plugin.xml",
+    "version": "perl -p -i -e 's/(version=)\"\\d+\\.\\d+\\.\\d+\"/$1\"'$npm_package_version'\"$2/' plugin.xml && git add plugin.xml",
     "postversion": "git push && git push --tags"
   },
   "keywords": [
