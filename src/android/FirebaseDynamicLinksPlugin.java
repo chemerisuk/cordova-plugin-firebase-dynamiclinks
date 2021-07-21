@@ -87,15 +87,13 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
                     public JSONObject then(Task<PendingDynamicLinkData> task) throws JSONException {
                         PendingDynamicLinkData data = task.getResult();
 
+			// Hathaway code (Java version) change made to avoid a "phantom" empty deeplink from clobbering a valid deeplink on first launch. Refer to ticket PRG-1613
+			if ("".equals(data.getLink())) return null;
+
                         JSONObject result = new JSONObject();
                         result.put("deepLink", data.getLink());
                         result.put("clickTimestamp", data.getClickTimestamp());
                         result.put("minimumAppVersion", data.getMinimumAppVersion());
-                        
-			// Hathaway code (Java version) change made to avoid a "phantom" empty deeplink from clobbering a valid deeplink on first launch. Refer to ticket PRG-1613
-			if (data.getLink().equals("")){
-				return new JSONObject();
-			}
 
                         if (callbackContext != null) {
                             PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
