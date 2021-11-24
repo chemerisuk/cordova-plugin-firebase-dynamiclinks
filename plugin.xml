@@ -92,6 +92,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             </feature>
         </config-file>
 
+        <config-file target="config.xml" parent="/*">
+            <preference name="AndroidLaunchMode" value="singleTask" />
+        </config-file>
+
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
@@ -101,10 +105,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 <data android:host="$APP_DOMAIN_NAME" android:pathPrefix="$APP_DOMAIN_PATH" android:scheme="https"/>
             </intent-filter>
         </config-file>
-
-        <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
-            <activity android:launchMode="singleTask" />
-        </edit-config>
 
         <source-file src="src/android/FirebaseDynamicLinksPlugin.java" target-dir="src/by/chemerisuk/cordova/firebase" />
 
