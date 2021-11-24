@@ -102,6 +102,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             </intent-filter>
         </config-file>
 
+        <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
+            <activity android:launchMode="singleTask" />
+        </edit-config>
+
         <source-file src="src/android/FirebaseDynamicLinksPlugin.java" target-dir="src/by/chemerisuk/cordova/firebase" />
 
         <dependency id="cordova-support-android-plugin" version="~1.0.0"/>
