@@ -8,7 +8,6 @@
 
 - [Supported Platforms](#supported-platforms)
 - [Installation](#installation)
-- [Quirks](#quirks)
 - [Methods](#methods)
 - [Dynamic link parameters](#dynamic-link-parameters)
 
@@ -51,14 +50,6 @@ Cordova supports `resource-file` tag for easy copying resources files. Firebase 
     <resource-file src="GoogleService-Info.plist" />
 </platform>
 ```
-
-## Quirks
-On Android you have to add `AndroidLaunchMode` setting in order to prevent creating of multiple app activities:
-```xml
-<preference name="AndroidLaunchMode" value="singleTask" />
-```
-
-To get callback for new app installs on iOS your dynamic link MUST have an [app preview page](https://firebase.google.com/docs/dynamic-links/link-previews), which is by default.
 
 ## Methods
 
