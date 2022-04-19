@@ -57,15 +57,15 @@
     // handle firebase dynamic link
     return [[FIRDynamicLinks dynamicLinks]
         handleUniversalLink:userActivity.webpageURL
-        completion:^(FIRDynamicLink * _Nullable dynamicLink, NSError * _Nullable error) {
-            // Try this method as some dynamic links are not recognize by handleUniversalLink
-            // ISSUE: https://github.com/firebase/firebase-ios-sdk/issues/743
-            dynamicLink = dynamicLink ? dynamicLink
-                : [[FIRDynamicLinks dynamicLinks]
-                   dynamicLinkFromUniversalLinkURL:userActivity.webpageURL];
-
+        completion:^(FIRDynamicLink * dynamicLink, NSError * error) {
             if (dynamicLink) {
                 [dl postDynamicLink:dynamicLink];
+            } else {
+                [[FIRDynamicLinks dynamicLinks] dynamicLinkFromUniversalLinkURL:userActivity.webpageURL completion:^(FIRDynamicLink * dynamicLink, NSError * error) {
+                    if (dynamicLink) {
+                        [dl postDynamicLink:dynamicLink];
+                    }
+                }];
             }
         }] || handled;
 }
