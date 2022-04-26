@@ -21,8 +21,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <preference name="APP_DOMAIN_NAME" />
     <preference name="APP_DOMAIN_PATH" default="/" />
 
-    <dependency id="cordova-plugin-firebase-analytics" version="~6.1.0"/>
-
     <platform name="ios">
         <preference name="IOS_FIREBASE_POD_VERSION" default="~> 8.8.0"/>
 
