@@ -8,7 +8,6 @@
 
 - [Supported Platforms](#supported-platforms)
 - [Installation](#installation)
-- [Quirks](#quirks)
 - [Methods](#methods)
 - [Dynamic link parameters](#dynamic-link-parameters)
 
@@ -29,15 +28,28 @@ Use variable `APP_DOMAIN_NAME` to specify your Google generated `*.page.link` do
 
 Use variables `APP_DOMAIN_PATH` to speciy a specific domain path prefix when using a custom domain. This is useful if multiple apps share the same root level domain. If specified this path **must** begin with a `/`.
 
-Use variables `IOS_FIREBASE_DYNAMICLINKS_VERSION` and `ANDROID_FIREBASE_DYNAMICLINKS_VERSION` to override dependency versions for Firebase SDKs.
+Use variables `IOS_FIREBASE_POD_VERSION` and `ANDROID_FIREBASE_DYNAMICLINKS_VERSION` to override dependency versions for Firebase SDKs:
 
-## Quirks
-On Android you have to add `AndroidLaunchMode` setting in order to prevent creating of multiple app activities:
+    $ cordova plugin add cordova-plugin-firebase-dynamiclinks --variable IOS_FIREBASE_POD_VERSION="~> 8.8.0" --variable ANDROID_FIREBASE_DYNAMICLINKS_VERSION="20.1.+"
+
+### Adding required configuration files
+
+Cordova supports `resource-file` tag for easy copying resources files. Firebase SDK requires `google-services.json` on Android and `GoogleService-Info.plist` on iOS platforms.
+
+1. Put `google-services.json` and/or `GoogleService-Info.plist` into the root directory of your Cordova project
+2. Add new tag for Android platform
+
 ```xml
-<preference name="AndroidLaunchMode" value="singleTask" />
+<platform name="android">
+    ...
+    <resource-file src="google-services.json" target="app/google-services.json" />
+</platform>
+...
+<platform name="ios">
+    ...
+    <resource-file src="GoogleService-Info.plist" />
+</platform>
 ```
-
-To get callback for new app installs on iOS your dynamic link MUST have an [app preview page](https://firebase.google.com/docs/dynamic-links/link-previews), which is by default.
 
 ## Methods
 
