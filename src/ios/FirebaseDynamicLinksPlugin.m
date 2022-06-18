@@ -10,6 +10,9 @@
     }
 
     self.domainUriPrefix = [self.commandDelegate.settings objectForKey:[@"DOMAIN_URI_PREFIX" lowercaseString]];
+    if ([self.domainUriPrefix hasSuffix:@"/"]) {
+        self.domainUriPrefix = [self.domainUriPrefix substringToIndex:[self.domainUriPrefix length] - 1];
+    }
 }
 
 - (void)getDynamicLink:(CDVInvokedUrlCommand *)command {
