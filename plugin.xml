@@ -10,7 +10,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
     <engines>
         <engine name="cordova" version=">=10.0.0"/>
-        <engine name="cordova-android" version=">=9.0.0"/>
+        <engine name="cordova-android" version=">=11.0.0"/>
         <engine name="cordova-ios" version=">=6.0.0"/>
     </engines>
 
@@ -21,10 +21,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <preference name="APP_DOMAIN_NAME" />
     <preference name="APP_DOMAIN_PATH" default="/" />
 
-    <dependency id="cordova-plugin-firebase-analytics" version="~6.1.0"/>
-
     <platform name="ios">
-        <preference name="IOS_FIREBASE_POD_VERSION" default="~> 8.8.0"/>
+        <preference name="IOS_FIREBASE_POD_VERSION" default="9.3.0" />
 
         <config-file parent="/*" target="config.xml">
             <preference name="DOMAIN_URI_PREFIX" value="https://$APP_DOMAIN_NAME$APP_DOMAIN_PATH"/>
@@ -76,14 +74,14 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <config>
                 <source url="https://cdn.cocoapods.org/" />
             </config>
-            <pods>
+            <pods use-frameworks="true">
                 <pod name="Firebase/DynamicLinks" spec="$IOS_FIREBASE_POD_VERSION" />
             </pods>
         </podspec>
     </platform>
 
     <platform name="android">
-        <preference name="ANDROID_FIREBASE_DYNAMICLINKS_VERSION" default="20.1.+"/>
+        <preference name="ANDROID_FIREBASE_BOM_VERSION" default="30.3.1" />
 
         <config-file parent="/*" target="res/xml/config.xml">
             <preference name="DOMAIN_URI_PREFIX" value="https://$APP_DOMAIN_NAME$APP_DOMAIN_PATH"/>
@@ -94,6 +92,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <config-file target="config.xml" parent="/*">
             <preference name="AndroidLaunchMode" value="singleTask" />
+            <preference name="AndroidXEnabled" value="true" />
+            <preference name="GradlePluginGoogleServicesEnabled" value="true" />
+            <preference name="GradlePluginGoogleServicesVersion" value="4.3.13" />
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
@@ -108,9 +109,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
         <source-file src="src/android/FirebaseDynamicLinksPlugin.java" target-dir="src/by/chemerisuk/cordova/firebase" />
 
-        <dependency id="cordova-support-android-plugin" version="~1.0.0"/>
+        <dependency id="cordova-support-android-plugin" version="~2.0.3" />
 
-        <framework src="com.google.firebase:firebase-dynamic-links:$ANDROID_FIREBASE_DYNAMICLINKS_VERSION" />
+        <framework src="platform('com.google.firebase:firebase-bom:$ANDROID_FIREBASE_BOM_VERSION')" />
+        <framework src="com.google.firebase:firebase-dynamic-links" />
     </platform>
 
 </plugin>
