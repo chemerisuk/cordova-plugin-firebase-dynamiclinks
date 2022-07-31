@@ -1,6 +1,7 @@
 {
   "typedocOptions": {
     "out": "docs",
+    "readme": "none",
     "entryPointStrategy": "expand",
     "hideBreadcrumbs": true,
     "hideInPageTOC": true,

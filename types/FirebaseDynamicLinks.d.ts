@@ -82,10 +82,101 @@ export type DynamicLinkPayload = {
      */
     minimumAppVersion?: number;
 };
+export type DynamicLinkAndroidInfo = {
+    /**
+     * Package name of the Android app to use to open the link.
+     */
+    androidPackageName: string;
+    /**
+     * Link to open when the app isn't installed.
+     */
+    androidFallbackLink: string;
+    /**
+     * VersionCode of the minimum version of your app that can open the link.
+     */
+    androidMinPackageVersionCode: number;
+};
+export type DynamicLinkIosInfo = {
+    /**
+     * Bundle ID of the iOS app to use to open the link.
+     */
+    iosBundleId: string;
+    /**
+     * Link to open when the app isn't installed.
+     */
+    iosFallbackLink: string;
+    /**
+     * Link to open on iPads when the app isn't installed.
+     */
+    iosIpadFallbackLink: string;
+    /**
+     * Bundle ID of the iOS app to use on iPads to open the link.
+     */
+    iosIpadBundleId: string;
+    /**
+     * App Store ID, used to send users to the App Store when the app isn't installed.
+     */
+    iosAppStoreId: string;
+};
+export type DynamicLinkNavigationInfo = {
+    /**
+     * If true, app preview page will be disabled and there will be a redirect to the FDL.
+     */
+    enableForcedRedirect: boolean;
+};
+export type DynamicLinkGoogleAnalyticsInfo = {
+    /**
+     * Campaign source; used to identify a search engine, newsletter, or other source.
+     */
+    utmSource: string;
+    /**
+     * Campaign medium; used to identify a medium such as email or cost-per-click (cpc).
+     */
+    utmMedium: string;
+    /**
+     * Campaign name; The individual campaign name, slogan, promo code, etc. for a product.
+     */
+    utmCampaign: string;
+    /**
+     * Campaign content; used for A/B testing and content-targeted ads to differentiate ads or links that point to the same URL.
+     */
+    utmContent: string;
+    /**
+     * Campaign term; used with paid search to supply the keywords for ads.
+     */
+    utmTerm: string;
+};
+export type DynamicLinkItunesAnalyticsInfo = {
+    /**
+     * Affiliate token used to create affiliate-coded links.
+     */
+    at: string;
+    /**
+     * Campaign token that developers can add to any link in order to track sales from a specific marketing campaign.
+     */
+    ct: string;
+    /**
+     * Provider token that enables analytics for Dynamic Links from within iTunes Connect.
+     */
+    pt: string;
+};
+export type DynamicLinkSocialInfo = {
+    /**
+     * Title to use when the Dynamic Link is shared in a social post.
+     */
+    socialTitle: string;
+    /**
+     * Description to use when the Dynamic Link is shared in a social post.
+     */
+    socialDescription: string;
+    /**
+     * URL to an image related to this link.
+     */
+    socialImageLink: string;
+};
 /**
- *
  * Options when creating a dynamic link Parameter names has the same meaning as
- * in the Firebase Dynamic Links Short Links API Reference.
+ * in the {@link https://firebase.google.com/docs/reference/dynamic-links/link-shortener#parameters | Firebase Dynamic Links Short Links API Reference}
  */
 export type DynamicLinkOptions = {
     /**
@@ -99,51 +190,25 @@ export type DynamicLinkOptions = {
     /**
      * Android parameters.
      */
-    androidInfo?: {
-        androidPackageName: string;
-        androidFallbackLink: string;
-        androidMinPackageVersionCode: number;
-    };
+    androidInfo?: DynamicLinkAndroidInfo;
     /**
      * iOS parameters.
      */
-    iosInfo?: {
-        iosBundleId: string;
-        iosFallbackLink: string;
-        iosIpadFallbackLink: string;
-        iosIpadBundleId: string;
-        iosAppStoreId: string;
-    };
+    iosInfo?: DynamicLinkIosInfo;
     /**
      * Navigation info parameters.
      */
-    navigationInfo?: {
-        enableForcedRedirect: boolean;
-    };
+    navigationInfo?: DynamicLinkNavigationInfo;
     /**
      * Google Analytics parameters.
      */
-    googlePlayAnalytics?: {
-        utmSource: string;
-        utmMedium: string;
-        utmCampaign: string;
-        utmContent: string;
-        utmTerm: string;
-    };
+    googlePlayAnalytics?: DynamicLinkGoogleAnalyticsInfo;
     /**
      * iTunes Connect App Analytics parameters.
      */
-    itunesConnectAnalytics?: {
-        at: string;
-        ct: string;
-        pt: string;
-    };
+    itunesConnectAnalytics?: DynamicLinkItunesAnalyticsInfo;
     /**
      * Social meta-tag parameters.
      */
-    socialMetaTagInfo?: {
-        socialTitle: string;
-        socialDescription: string;
-        socialImageLink: string;
-    };
+    socialMetaTagInfo?: DynamicLinkSocialInfo;
 };

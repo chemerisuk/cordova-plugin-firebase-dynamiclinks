@@ -68,45 +68,87 @@ Cordova supports `resource-file` tag for easy copying resources files. Firebase 
 
 ## Type Aliases
 
-### DynamicLinkOptions
+### DynamicLinkAndroidInfo
 
- **DynamicLinkOptions**: `Object`
-
-Options when creating a dynamic link Parameter names has the same meaning as
-in the Firebase Dynamic Links Short Links API Reference.
+ **DynamicLinkAndroidInfo**: `Object`
 
 #### Type declaration
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `androidInfo?` | { `androidFallbackLink`: `string` ; `androidMinPackageVersionCode`: `number` ; `androidPackageName`: `string`  } | Android parameters. |
-| `androidInfo.androidFallbackLink` | `string` | - |
-| `androidInfo.androidMinPackageVersionCode` | `number` | - |
-| `androidInfo.androidPackageName` | `string` | - |
+| `androidFallbackLink` | `string` | Link to open when the app isn't installed. |
+| `androidMinPackageVersionCode` | `number` | VersionCode of the minimum version of your app that can open the link. |
+| `androidPackageName` | `string` | Package name of the Android app to use to open the link. |
+
+### DynamicLinkGoogleAnalyticsInfo
+
+ **DynamicLinkGoogleAnalyticsInfo**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `utmCampaign` | `string` | Campaign name; The individual campaign name, slogan, promo code, etc. for a product. |
+| `utmContent` | `string` | Campaign content; used for A/B testing and content-targeted ads to differentiate ads or links that point to the same URL. |
+| `utmMedium` | `string` | Campaign medium; used to identify a medium such as email or cost-per-click (cpc). |
+| `utmSource` | `string` | Campaign source; used to identify a search engine, newsletter, or other source. |
+| `utmTerm` | `string` | Campaign term; used with paid search to supply the keywords for ads. |
+
+### DynamicLinkIosInfo
+
+ **DynamicLinkIosInfo**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `iosAppStoreId` | `string` | App Store ID, used to send users to the App Store when the app isn't installed. |
+| `iosBundleId` | `string` | Bundle ID of the iOS app to use to open the link. |
+| `iosFallbackLink` | `string` | Link to open when the app isn't installed. |
+| `iosIpadBundleId` | `string` | Bundle ID of the iOS app to use on iPads to open the link. |
+| `iosIpadFallbackLink` | `string` | Link to open on iPads when the app isn't installed. |
+
+### DynamicLinkItunesAnalyticsInfo
+
+ **DynamicLinkItunesAnalyticsInfo**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `at` | `string` | Affiliate token used to create affiliate-coded links. |
+| `ct` | `string` | Campaign token that developers can add to any link in order to track sales from a specific marketing campaign. |
+| `pt` | `string` | Provider token that enables analytics for Dynamic Links from within iTunes Connect. |
+
+### DynamicLinkNavigationInfo
+
+ **DynamicLinkNavigationInfo**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `enableForcedRedirect` | `boolean` | If true, app preview page will be disabled and there will be a redirect to the FDL. |
+
+### DynamicLinkOptions
+
+ **DynamicLinkOptions**: `Object`
+
+Options when creating a dynamic link Parameter names has the same meaning as
+in the [Firebase Dynamic Links Short Links API Reference](https://firebase.google.com/docs/reference/dynamic-links/link-shortener#parameters)
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `androidInfo?` | [`DynamicLinkAndroidInfo`](FirebaseDynamicLinks.md#dynamiclinkandroidinfo) | Android parameters. |
 | `domainUriPrefix?` | `string` | Domain uri prefix to use for this Dynamic Link. |
-| `googlePlayAnalytics?` | { `utmCampaign`: `string` ; `utmContent`: `string` ; `utmMedium`: `string` ; `utmSource`: `string` ; `utmTerm`: `string`  } | Google Analytics parameters. |
-| `googlePlayAnalytics.utmCampaign` | `string` | - |
-| `googlePlayAnalytics.utmContent` | `string` | - |
-| `googlePlayAnalytics.utmMedium` | `string` | - |
-| `googlePlayAnalytics.utmSource` | `string` | - |
-| `googlePlayAnalytics.utmTerm` | `string` | - |
-| `iosInfo?` | { `iosAppStoreId`: `string` ; `iosBundleId`: `string` ; `iosFallbackLink`: `string` ; `iosIpadBundleId`: `string` ; `iosIpadFallbackLink`: `string`  } | iOS parameters. |
-| `iosInfo.iosAppStoreId` | `string` | - |
-| `iosInfo.iosBundleId` | `string` | - |
-| `iosInfo.iosFallbackLink` | `string` | - |
-| `iosInfo.iosIpadBundleId` | `string` | - |
-| `iosInfo.iosIpadFallbackLink` | `string` | - |
-| `itunesConnectAnalytics?` | { `at`: `string` ; `ct`: `string` ; `pt`: `string`  } | iTunes Connect App Analytics parameters. |
-| `itunesConnectAnalytics.at` | `string` | - |
-| `itunesConnectAnalytics.ct` | `string` | - |
-| `itunesConnectAnalytics.pt` | `string` | - |
+| `googlePlayAnalytics?` | [`DynamicLinkGoogleAnalyticsInfo`](FirebaseDynamicLinks.md#dynamiclinkgoogleanalyticsinfo) | Google Analytics parameters. |
+| `iosInfo?` | [`DynamicLinkIosInfo`](FirebaseDynamicLinks.md#dynamiclinkiosinfo) | iOS parameters. |
+| `itunesConnectAnalytics?` | [`DynamicLinkItunesAnalyticsInfo`](FirebaseDynamicLinks.md#dynamiclinkitunesanalyticsinfo) | iTunes Connect App Analytics parameters. |
 | `link` | `string` | The link your app will open. |
-| `navigationInfo?` | { `enableForcedRedirect`: `boolean`  } | Navigation info parameters. |
-| `navigationInfo.enableForcedRedirect` | `boolean` | - |
-| `socialMetaTagInfo?` | { `socialDescription`: `string` ; `socialImageLink`: `string` ; `socialTitle`: `string`  } | Social meta-tag parameters. |
-| `socialMetaTagInfo.socialDescription` | `string` | - |
-| `socialMetaTagInfo.socialImageLink` | `string` | - |
-| `socialMetaTagInfo.socialTitle` | `string` | - |
+| `navigationInfo?` | [`DynamicLinkNavigationInfo`](FirebaseDynamicLinks.md#dynamiclinknavigationinfo) | Navigation info parameters. |
+| `socialMetaTagInfo?` | [`DynamicLinkSocialInfo`](FirebaseDynamicLinks.md#dynamiclinksocialinfo) | Social meta-tag parameters. |
 
 ### DynamicLinkPayload
 
@@ -119,6 +161,18 @@ in the Firebase Dynamic Links Short Links API Reference.
 | `clickTimestamp` | `number` | The time that the user clicked on the dynamic link. |
 | `deepLink` | `string` \| ``null`` | Link parameter of the dynamic link. |
 | `minimumAppVersion?` | `number` | The minimum app version requested to process the dynamic link that can be compared directly with versionCode (Android only) |
+
+### DynamicLinkSocialInfo
+
+ **DynamicLinkSocialInfo**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `socialDescription` | `string` | Description to use when the Dynamic Link is shared in a social post. |
+| `socialImageLink` | `string` | URL to an image related to this link. |
+| `socialTitle` | `string` | Title to use when the Dynamic Link is shared in a social post. |
 
 ## Functions
 
