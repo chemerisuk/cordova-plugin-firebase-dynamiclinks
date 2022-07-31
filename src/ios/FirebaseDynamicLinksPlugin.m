@@ -1,5 +1,7 @@
 #import "FirebaseDynamicLinksPlugin.h"
 
+@import FirebaseCore;
+
 @implementation FirebaseDynamicLinksPlugin
 
 - (void)pluginInitialize {
@@ -80,16 +82,13 @@
     if (navigationInfo) {
         linkBuilder.navigationInfoParameters = [self getNavigationInfoParameters:navigationInfo];
     }
-    NSDictionary* analyticsInfo = params[@"analyticsInfo"];
-    if (analyticsInfo) {
-        NSDictionary* googlePlayAnalyticsInfo = params[@"googlePlayAnalytics"];
-        if (googlePlayAnalyticsInfo) {
-            linkBuilder.analyticsParameters = [self getGoogleAnalyticsParameters:googlePlayAnalyticsInfo];
-        }
-        NSDictionary* itunesConnectAnalyticsInfo = params[@"itunesConnectAnalytics"];
-        if (itunesConnectAnalyticsInfo) {
-            linkBuilder.iTunesConnectParameters = [self getItunesConnectAnalyticsParameters:itunesConnectAnalyticsInfo];
-        }
+    NSDictionary* googlePlayAnalyticsInfo = params[@"googlePlayAnalytics"];
+    if (googlePlayAnalyticsInfo) {
+        linkBuilder.analyticsParameters = [self getGoogleAnalyticsParameters:googlePlayAnalyticsInfo];
+    }
+    NSDictionary* itunesConnectAnalyticsInfo = params[@"itunesConnectAnalytics"];
+    if (itunesConnectAnalyticsInfo) {
+        linkBuilder.iTunesConnectParameters = [self getItunesConnectAnalyticsParameters:itunesConnectAnalyticsInfo];
     }
     NSDictionary* socialMetaTagInfo = params[@"socialMetaTagInfo"];
     if (socialMetaTagInfo) {

@@ -2,7 +2,6 @@
 #import "FirebaseDynamicLinksPlugin.h"
 #import <objc/runtime.h>
 
-
 @implementation AppDelegate (FirebaseDynamicLinksPlugin)
 
 + (void)load {
