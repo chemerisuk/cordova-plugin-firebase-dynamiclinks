@@ -49,6 +49,8 @@ exports.createDynamicLink =
  * @example
  * cordova.plugins.firebase.dynamiclinks.createDynamicLink({
  *     link: "https://google.com"
+ * }).then(function(deepLink) {
+ *     console.log("Generated deep link", deepLink);
  * });
  */
 function(params) {
@@ -70,6 +72,8 @@ exports.createShortDynamicLink =
  * @example
  * cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
  *     link: "https://google.com"
+ * }).then(function(deepLink) {
+ *     console.log("Generated deep link", deepLink);
  * });
  */
 function(params) {
@@ -94,8 +98,10 @@ exports.createUnguessableDynamicLink =
  * @returns {Promise<string>} Fulfils promise with created link string
  *
  * @example
- * cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
+ * cordova.plugins.firebase.dynamiclinks.createUnguessableDynamicLink({
  *     link: "https://google.com"
+ * }).then(function(deepLink) {
+ *     console.log("Generated deep link", deepLink);
  * });
  */
 function(params) {

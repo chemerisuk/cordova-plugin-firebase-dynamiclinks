@@ -165,14 +165,14 @@ in the [Firebase Dynamic Links Short Links API Reference](https://firebase.googl
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `androidInfo?` | [`DynamicLinkAndroidInfo`](README.md#dynamiclinkandroidinfo) | Android parameters. |
+| `androidInfo?` | [`DynamicLinkAndroidInfo`](#dynamiclinkandroidinfo) | Android parameters. |
 | `domainUriPrefix?` | `string` | Domain uri prefix to use for this Dynamic Link. |
-| `googlePlayAnalytics?` | [`DynamicLinkGoogleAnalyticsInfo`](README.md#dynamiclinkgoogleanalyticsinfo) | Google Analytics parameters. |
-| `iosInfo?` | [`DynamicLinkIosInfo`](README.md#dynamiclinkiosinfo) | iOS parameters. |
-| `itunesConnectAnalytics?` | [`DynamicLinkItunesAnalyticsInfo`](README.md#dynamiclinkitunesanalyticsinfo) | iTunes Connect App Analytics parameters. |
+| `googlePlayAnalytics?` | [`DynamicLinkGoogleAnalyticsInfo`](#dynamiclinkgoogleanalyticsinfo) | Google Analytics parameters. |
+| `iosInfo?` | [`DynamicLinkIosInfo`](#dynamiclinkiosinfo) | iOS parameters. |
+| `itunesConnectAnalytics?` | [`DynamicLinkItunesAnalyticsInfo`](#dynamiclinkitunesanalyticsinfo) | iTunes Connect App Analytics parameters. |
 | `link` | `string` | The link your app will open. |
-| `navigationInfo?` | [`DynamicLinkNavigationInfo`](README.md#dynamiclinknavigationinfo) | Navigation info parameters. |
-| `socialMetaTagInfo?` | [`DynamicLinkSocialInfo`](README.md#dynamiclinksocialinfo) | Social meta-tag parameters. |
+| `navigationInfo?` | [`DynamicLinkNavigationInfo`](#dynamiclinknavigationinfo) | Navigation info parameters. |
+| `socialMetaTagInfo?` | [`DynamicLinkSocialInfo`](#dynamiclinksocialinfo) | Social meta-tag parameters. |
 
 ___
 
@@ -215,6 +215,8 @@ Creates a Dynamic Link from the parameters.
 ```ts
 cordova.plugins.firebase.dynamiclinks.createDynamicLink({
     link: "https://google.com"
+}).then(function(deepLink) {
+    console.log("Generated deep link", deepLink);
 });
 ```
 
@@ -222,7 +224,7 @@ cordova.plugins.firebase.dynamiclinks.createDynamicLink({
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`DynamicLinkOptions`](README.md#dynamiclinkoptions) | Parameters to use for building a link |
+| `params` | [`DynamicLinkOptions`](#dynamiclinkoptions) | Parameters to use for building a link |
 
 #### Returns
 
@@ -246,6 +248,8 @@ not be exposed if a short Dynamic Link URL were guessed.
 ```ts
 cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
     link: "https://google.com"
+}).then(function(deepLink) {
+    console.log("Generated deep link", deepLink);
 });
 ```
 
@@ -253,7 +257,7 @@ cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`DynamicLinkOptions`](README.md#dynamiclinkoptions) | Parameters to use for building a link |
+| `params` | [`DynamicLinkOptions`](#dynamiclinkoptions) | Parameters to use for building a link |
 
 #### Returns
 
@@ -276,8 +280,10 @@ from being crawled, which can potentially expose sensitive information.
 **`Example`**
 
 ```ts
-cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
+cordova.plugins.firebase.dynamiclinks.createUnguessableDynamicLink({
     link: "https://google.com"
+}).then(function(deepLink) {
+    console.log("Generated deep link", deepLink);
 });
 ```
 
@@ -285,7 +291,7 @@ cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`DynamicLinkOptions`](README.md#dynamiclinkoptions) | Parameters to use for building a link |
+| `params` | [`DynamicLinkOptions`](#dynamiclinkoptions) | Parameters to use for building a link |
 
 #### Returns
 
@@ -297,7 +303,7 @@ ___
 
 ### getDynamicLink
 
-**getDynamicLink**(): `Promise`<[`DynamicLinkPayload`](README.md#dynamiclinkpayload) \| ``null``\>
+**getDynamicLink**(): `Promise`<[`DynamicLinkPayload`](#dynamiclinkpayload) \| ``null``\>
 
 Determines if the app has a pending dynamic link and provide access to the dynamic link parameters.
 
@@ -315,7 +321,7 @@ cordova.plugins.firebase.dynamiclinks.getDynamicLink().then(function(payload) {
 
 #### Returns
 
-`Promise`<[`DynamicLinkPayload`](README.md#dynamiclinkpayload) \| ``null``\>
+`Promise`<[`DynamicLinkPayload`](#dynamiclinkpayload) \| ``null``\>
 
 Fulfils promise with dynamic link payload when it exists.
 
@@ -339,7 +345,7 @@ cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(payload) {
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`payload`: [`DynamicLinkPayload`](README.md#dynamiclinkpayload)) => `void` | Callback function |
+| `callback` | (`payload`: [`DynamicLinkPayload`](#dynamiclinkpayload)) => `void` | Callback function |
 | `errorCallback` | (`error`: `string`) => `void` | Error callback function |
 
 #### Returns
