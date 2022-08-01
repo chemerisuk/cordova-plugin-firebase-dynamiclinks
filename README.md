@@ -12,12 +12,26 @@
 
 ## Index
 
-<!-- MarkdownTOC levels="2" autolink="true" -->
+<!-- MarkdownTOC levels="2,3" autolink="true" -->
 
 - [Supported Platforms](#supported-platforms)
 - [Installation](#installation)
+    - [Adding required configuration files](#adding-required-configuration-files)
 - [Type Aliases](#type-aliases)
+    - [DynamicLinkAndroidInfo](#dynamiclinkandroidinfo)
+    - [DynamicLinkGoogleAnalyticsInfo](#dynamiclinkgoogleanalyticsinfo)
+    - [DynamicLinkIosInfo](#dynamiclinkiosinfo)
+    - [DynamicLinkItunesAnalyticsInfo](#dynamiclinkitunesanalyticsinfo)
+    - [DynamicLinkNavigationInfo](#dynamiclinknavigationinfo)
+    - [DynamicLinkOptions](#dynamiclinkoptions)
+    - [DynamicLinkPayload](#dynamiclinkpayload)
+    - [DynamicLinkSocialInfo](#dynamiclinksocialinfo)
 - [Functions](#functions)
+    - [createDynamicLink](#createdynamiclink)
+    - [createShortDynamicLink](#createshortdynamiclink)
+    - [createUnguessableDynamicLink](#createunguessabledynamiclink)
+    - [getDynamicLink](#getdynamiclink)
+    - [onDynamicLink](#ondynamiclink)
 
 <!-- /MarkdownTOC -->
 
@@ -80,6 +94,8 @@ Cordova supports `resource-file` tag for easy copying resources files. Firebase 
 | `androidMinPackageVersionCode` | `number` | VersionCode of the minimum version of your app that can open the link. |
 | `androidPackageName` | `string` | Package name of the Android app to use to open the link. |
 
+___
+
 ### DynamicLinkGoogleAnalyticsInfo
 
  **DynamicLinkGoogleAnalyticsInfo**: `Object`
@@ -93,6 +109,8 @@ Cordova supports `resource-file` tag for easy copying resources files. Firebase 
 | `utmMedium` | `string` | Campaign medium; used to identify a medium such as email or cost-per-click (cpc). |
 | `utmSource` | `string` | Campaign source; used to identify a search engine, newsletter, or other source. |
 | `utmTerm` | `string` | Campaign term; used with paid search to supply the keywords for ads. |
+
+___
 
 ### DynamicLinkIosInfo
 
@@ -108,6 +126,8 @@ Cordova supports `resource-file` tag for easy copying resources files. Firebase 
 | `iosIpadBundleId` | `string` | Bundle ID of the iOS app to use on iPads to open the link. |
 | `iosIpadFallbackLink` | `string` | Link to open on iPads when the app isn't installed. |
 
+___
+
 ### DynamicLinkItunesAnalyticsInfo
 
  **DynamicLinkItunesAnalyticsInfo**: `Object`
@@ -120,6 +140,8 @@ Cordova supports `resource-file` tag for easy copying resources files. Firebase 
 | `ct` | `string` | Campaign token that developers can add to any link in order to track sales from a specific marketing campaign. |
 | `pt` | `string` | Provider token that enables analytics for Dynamic Links from within iTunes Connect. |
 
+___
+
 ### DynamicLinkNavigationInfo
 
  **DynamicLinkNavigationInfo**: `Object`
@@ -129,6 +151,8 @@ Cordova supports `resource-file` tag for easy copying resources files. Firebase 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `enableForcedRedirect` | `boolean` | If true, app preview page will be disabled and there will be a redirect to the FDL. |
+
+___
 
 ### DynamicLinkOptions
 
@@ -141,14 +165,16 @@ in the [Firebase Dynamic Links Short Links API Reference](https://firebase.googl
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `androidInfo?` | [`DynamicLinkAndroidInfo`](FirebaseDynamicLinks.md#dynamiclinkandroidinfo) | Android parameters. |
+| `androidInfo?` | [`DynamicLinkAndroidInfo`](README.md#dynamiclinkandroidinfo) | Android parameters. |
 | `domainUriPrefix?` | `string` | Domain uri prefix to use for this Dynamic Link. |
-| `googlePlayAnalytics?` | [`DynamicLinkGoogleAnalyticsInfo`](FirebaseDynamicLinks.md#dynamiclinkgoogleanalyticsinfo) | Google Analytics parameters. |
-| `iosInfo?` | [`DynamicLinkIosInfo`](FirebaseDynamicLinks.md#dynamiclinkiosinfo) | iOS parameters. |
-| `itunesConnectAnalytics?` | [`DynamicLinkItunesAnalyticsInfo`](FirebaseDynamicLinks.md#dynamiclinkitunesanalyticsinfo) | iTunes Connect App Analytics parameters. |
+| `googlePlayAnalytics?` | [`DynamicLinkGoogleAnalyticsInfo`](README.md#dynamiclinkgoogleanalyticsinfo) | Google Analytics parameters. |
+| `iosInfo?` | [`DynamicLinkIosInfo`](README.md#dynamiclinkiosinfo) | iOS parameters. |
+| `itunesConnectAnalytics?` | [`DynamicLinkItunesAnalyticsInfo`](README.md#dynamiclinkitunesanalyticsinfo) | iTunes Connect App Analytics parameters. |
 | `link` | `string` | The link your app will open. |
-| `navigationInfo?` | [`DynamicLinkNavigationInfo`](FirebaseDynamicLinks.md#dynamiclinknavigationinfo) | Navigation info parameters. |
-| `socialMetaTagInfo?` | [`DynamicLinkSocialInfo`](FirebaseDynamicLinks.md#dynamiclinksocialinfo) | Social meta-tag parameters. |
+| `navigationInfo?` | [`DynamicLinkNavigationInfo`](README.md#dynamiclinknavigationinfo) | Navigation info parameters. |
+| `socialMetaTagInfo?` | [`DynamicLinkSocialInfo`](README.md#dynamiclinksocialinfo) | Social meta-tag parameters. |
+
+___
 
 ### DynamicLinkPayload
 
@@ -161,6 +187,8 @@ in the [Firebase Dynamic Links Short Links API Reference](https://firebase.googl
 | `clickTimestamp` | `number` | The time that the user clicked on the dynamic link. |
 | `deepLink` | `string` \| ``null`` | Link parameter of the dynamic link. |
 | `minimumAppVersion?` | `number` | The minimum app version requested to process the dynamic link that can be compared directly with versionCode (Android only) |
+
+___
 
 ### DynamicLinkSocialInfo
 
@@ -176,7 +204,9 @@ in the [Firebase Dynamic Links Short Links API Reference](https://firebase.googl
 
 ## Functions
 
-### **createDynamicLink**(`params`): `Promise`<`string`\>
+### createDynamicLink
+
+**createDynamicLink**(`params`): `Promise`<`string`\>
 
 Creates a Dynamic Link from the parameters.
 
@@ -192,15 +222,19 @@ cordova.plugins.firebase.dynamiclinks.createDynamicLink({
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`DynamicLinkOptions`](FirebaseDynamicLinks.md#dynamiclinkoptions) | Parameters to use for building a link |
+| `params` | [`DynamicLinkOptions`](README.md#dynamiclinkoptions) | Parameters to use for building a link |
 
 #### Returns
 
 `Promise`<`string`\>
 
-Fulfils promise with created link value
+Fulfils promise with created link string
 
-### **createShortDynamicLink**(`params`): `Promise`<`string`\>
+___
+
+### createShortDynamicLink
+
+**createShortDynamicLink**(`params`): `Promise`<`string`\>
 
 Creates a shortened Dynamic Link from the parameters. Shorten the path
 to a string that is only as long as needed to be unique, with a minimum
@@ -219,15 +253,19 @@ cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`DynamicLinkOptions`](FirebaseDynamicLinks.md#dynamiclinkoptions) | Parameters to use for building a link |
+| `params` | [`DynamicLinkOptions`](README.md#dynamiclinkoptions) | Parameters to use for building a link |
 
 #### Returns
 
 `Promise`<`string`\>
 
-Fulfils promise with created link value
+Fulfils promise with created link string
 
-### **createUnguessableDynamicLink**(`params`): `Promise`<`string`\>
+___
+
+### createUnguessableDynamicLink
+
+**createUnguessableDynamicLink**(`params`): `Promise`<`string`\>
 
 Creates a Dynamic Link from the parameters. Shorten the path to
 an unguessable string. Such strings are created by base62-encoding
@@ -247,15 +285,19 @@ cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `params` | [`DynamicLinkOptions`](FirebaseDynamicLinks.md#dynamiclinkoptions) | Parameters to use for building a link |
+| `params` | [`DynamicLinkOptions`](README.md#dynamiclinkoptions) | Parameters to use for building a link |
 
 #### Returns
 
 `Promise`<`string`\>
 
-Fulfils promise with created link value
+Fulfils promise with created link string
 
-### **getDynamicLink**(): `Promise`<[`DynamicLinkPayload`](FirebaseDynamicLinks.md#dynamiclinkpayload) \| ``null``\>
+___
+
+### getDynamicLink
+
+**getDynamicLink**(): `Promise`<[`DynamicLinkPayload`](README.md#dynamiclinkpayload) \| ``null``\>
 
 Determines if the app has a pending dynamic link and provide access to the dynamic link parameters.
 
@@ -273,19 +315,23 @@ cordova.plugins.firebase.dynamiclinks.getDynamicLink().then(function(payload) {
 
 #### Returns
 
-`Promise`<[`DynamicLinkPayload`](FirebaseDynamicLinks.md#dynamiclinkpayload) \| ``null``\>
+`Promise`<[`DynamicLinkPayload`](README.md#dynamiclinkpayload) \| ``null``\>
 
-Dynamic link payload.
+Fulfils promise with dynamic link payload when it exists.
 
-### **onDynamicLink**(`callback`, `errorCallback`): `void`
+___
+
+### onDynamicLink
+
+**onDynamicLink**(`callback`, `errorCallback`): `void`
 
 Registers callback that is triggered on each dynamic link click.
 
 **`Example`**
 
 ```ts
-cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(data) {
-    console.log("Dynamic link click with data:", data);
+cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(payload) {
+    console.log("Dynamic link click with data:", payload);
 });
 ```
 
@@ -293,7 +339,7 @@ cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(data) {
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `callback` | (`payload`: [`DynamicLinkPayload`](FirebaseDynamicLinks.md#dynamiclinkpayload)) => `void` | Callback function |
+| `callback` | (`payload`: [`DynamicLinkPayload`](README.md#dynamiclinkpayload)) => `void` | Callback function |
 | `errorCallback` | (`error`: `string`) => `void` | Error callback function |
 
 #### Returns

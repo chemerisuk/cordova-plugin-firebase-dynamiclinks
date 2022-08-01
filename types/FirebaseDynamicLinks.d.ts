@@ -1,7 +1,7 @@
 /**
  *
  * Determines if the app has a pending dynamic link and provide access to the dynamic link parameters.
- * @returns {Promise<DynamicLinkPayload|null>} Dynamic link payload.
+ * @returns {Promise<DynamicLinkPayload|null>} Fulfils promise with dynamic link payload when it exists.
  *
  * @example
  * cordova.plugins.firebase.dynamiclinks.getDynamicLink().then(function(payload) {
@@ -20,8 +20,8 @@ export function getDynamicLink(): Promise<DynamicLinkPayload | null>;
  * @param {(error: string) => void} errorCallback Error callback function
  *
  * @example
- * cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(data) {
- *     console.log("Dynamic link click with data:", data);
+ * cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(payload) {
+ *     console.log("Dynamic link click with data:", payload);
  * });
  */
 export function onDynamicLink(callback: (payload: DynamicLinkPayload) => void, errorCallback: (error: string) => void): void;
@@ -29,7 +29,7 @@ export function onDynamicLink(callback: (payload: DynamicLinkPayload) => void, e
  *
  * Creates a Dynamic Link from the parameters.
  * @param {DynamicLinkOptions} params Parameters to use for building a link
- * @returns {Promise<string>} Fulfils promise with created link value
+ * @returns {Promise<string>} Fulfils promise with created link string
  *
  * @example
  * cordova.plugins.firebase.dynamiclinks.createDynamicLink({
@@ -44,7 +44,7 @@ export function createDynamicLink(params: DynamicLinkOptions): Promise<string>;
  * length of 4 characters. Use this method if sensitive information would
  * not be exposed if a short Dynamic Link URL were guessed.
  * @param {DynamicLinkOptions} params Parameters to use for building a link
- * @returns {Promise<string>} Fulfils promise with created link value
+ * @returns {Promise<string>} Fulfils promise with created link string
  *
  * @example
  * cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
@@ -60,7 +60,7 @@ export function createShortDynamicLink(params: DynamicLinkOptions): Promise<stri
  * characters. Use unguessable strings to prevent your Dynamic Links
  * from being crawled, which can potentially expose sensitive information.
  * @param {DynamicLinkOptions} params Parameters to use for building a link
- * @returns {Promise<string>} Fulfils promise with created link value
+ * @returns {Promise<string>} Fulfils promise with created link string
  *
  * @example
  * cordova.plugins.firebase.dynamiclinks.createShortDynamicLink({
