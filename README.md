@@ -329,7 +329,7 @@ ___
 
 ### onDynamicLink
 
-**onDynamicLink**(`callback`, `errorCallback`): `void`
+**onDynamicLink**(`callback`, `errorCallback?`): `void`
 
 Registers callback that is triggered on each dynamic link click.
 
@@ -346,7 +346,7 @@ cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(payload) {
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `callback` | (`payload`: [`DynamicLinkPayload`](#dynamiclinkpayload)) => `void` | Callback function |
-| `errorCallback` | (`error`: `string`) => `void` | Error callback function |
+| `errorCallback?` | (`error`: `string`) => `void` | Error callback function |
 
 #### Returns
 
