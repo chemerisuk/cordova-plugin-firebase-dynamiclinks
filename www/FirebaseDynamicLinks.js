@@ -28,7 +28,7 @@ exports.onDynamicLink =
  *
  * Registers callback that is triggered on each dynamic link click.
  * @param {(payload: DynamicLinkPayload) => void} callback Callback function
- * @param {(error: string) => void} errorCallback Error callback function
+ * @param {(error: string) => void} [errorCallback] Error callback function
  *
  * @example
  * cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(payload) {
