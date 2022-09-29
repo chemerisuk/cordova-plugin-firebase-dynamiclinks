@@ -1,13 +1,11 @@
 package by.chemerisuk.cordova.firebase;
 
+import static by.chemerisuk.cordova.support.ExecutionThread.WORKER;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters;
 import com.google.firebase.dynamiclinks.DynamicLink.GoogleAnalyticsParameters;
@@ -17,9 +15,9 @@ import com.google.firebase.dynamiclinks.DynamicLink.NavigationInfoParameters;
 import com.google.firebase.dynamiclinks.DynamicLink.SocialMetaTagParameters;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
-import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,97 +58,80 @@ public class FirebaseDynamicLinksPlugin extends ReflectiveCordovaPlugin {
         dynamicLinkCallback = callbackContext;
     }
 
-    @CordovaMethod(ExecutionThread.WORKER)
-    private void createDynamicLink(JSONObject params, int linkType, final CallbackContext callbackContext) throws JSONException {
+    @CordovaMethod(WORKER)
+    private void createDynamicLink(CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
+        JSONObject params = args.getJSONObject(0);
+        int linkType = args.getInt(1);
         DynamicLink.Builder builder = createDynamicLinkBuilder(params);
         if (linkType == 0) {
             callbackContext.success(builder.buildDynamicLink().getUri().toString());
         } else {
             builder.buildShortDynamicLink(linkType)
-                .addOnCompleteListener(this.cordova.getActivity(), new OnCompleteListener<ShortDynamicLink>() {
-                    @Override
-                    public void onComplete(Task<ShortDynamicLink> task) {
-                        if (task.isSuccessful()) {
-                            callbackContext.success(task.getResult().getShortLink().toString());
-                        } else {
-                            callbackContext.error(task.getException().getMessage());
-                        }
+                .addOnCompleteListener(this.cordova.getActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        callbackContext.success(task.getResult().getShortLink().toString());
+                    } else {
+                        callbackContext.error(task.getException().getMessage());
                     }
                 });
         }
     }
 
     private void respondWithDynamicLink(Intent intent, final CallbackContext callbackContext) {
-        this.firebaseDynamicLinks.getDynamicLink(intent)
-                .continueWith(new Continuation<PendingDynamicLinkData, JSONObject>() {
-                    @Override
-                    public JSONObject then(Task<PendingDynamicLinkData> task) throws JSONException {
-                        PendingDynamicLinkData data = task.getResult();
+        this.firebaseDynamicLinks.getDynamicLink(intent).continueWith(task -> {
+            PendingDynamicLinkData data = task.getResult();
+            // Hathaway code (Java version) change made to avoid a "phantom" empty deeplink
+            // from clobbering a valid deeplink on first launch. Refer to ticket PRG-1613
+            if ("".equals(data.getLink())) return null;
 
-			// Hathaway code (Java version) change made to avoid a "phantom" empty deeplink from clobbering a valid deeplink on first launch. Refer to ticket PRG-1613
-			if ("".equals(data.getLink())) return null;
+            JSONObject result = new JSONObject();
+            result.put("deepLink", data.getLink());
+            result.put("clickTimestamp", data.getClickTimestamp());
+            result.put("minimumAppVersion", data.getMinimumAppVersion());
 
-                        JSONObject result = new JSONObject();
-                        result.put("deepLink", data.getLink());
-                        result.put("clickTimestamp", data.getClickTimestamp());
-                        result.put("minimumAppVersion", data.getMinimumAppVersion());
+            if (callbackContext != null) {
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
+                pluginResult.setKeepCallback(callbackContext == dynamicLinkCallback);
+                callbackContext.sendPluginResult(pluginResult);
+            }
 
-                        if (callbackContext != null) {
-                            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
-                            pluginResult.setKeepCallback(callbackContext == dynamicLinkCallback);
-                            callbackContext.sendPluginResult(pluginResult);
-                        }
-
-                        return result;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(Exception e) {
-                        if (callbackContext != null && callbackContext != dynamicLinkCallback) {
-                            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, (String)null));
-                        }
-                    }
-                });
+            return result;
+        })
+        .addOnFailureListener(e -> {
+            if (callbackContext != null && callbackContext != dynamicLinkCallback) {
+                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, (String)null));
+            }
+        });
     }
 
     private DynamicLink.Builder createDynamicLinkBuilder(JSONObject params) throws JSONException {
         DynamicLink.Builder builder = this.firebaseDynamicLinks.createDynamicLink();
         builder.setDomainUriPrefix(params.optString("domainUriPrefix", this.domainUriPrefix));
         builder.setLink(Uri.parse(params.getString("link")));
-
         JSONObject androidInfo = params.optJSONObject("androidInfo");
         if (androidInfo != null) {
             builder.setAndroidParameters(getAndroidParameters(androidInfo));
         }
-
         JSONObject iosInfo = params.optJSONObject("iosInfo");
         if (iosInfo != null) {
             builder.setIosParameters(getIosParameters(iosInfo));
         }
-
         JSONObject navigationInfo = params.optJSONObject("navigationInfo");
         if (navigationInfo != null) {
             builder.setNavigationInfoParameters(getNavigationInfoParameters(navigationInfo));
         }
-
-        JSONObject analyticsInfo = params.optJSONObject("analyticsInfo");
-        if (analyticsInfo != null) {
-            JSONObject googlePlayAnalyticsInfo = analyticsInfo.optJSONObject("googlePlayAnalytics");
-            if (googlePlayAnalyticsInfo != null) {
-                builder.setGoogleAnalyticsParameters(getGoogleAnalyticsParameters(googlePlayAnalyticsInfo));
-            }
-            JSONObject itunesConnectAnalyticsInfo = analyticsInfo.optJSONObject("itunesConnectAnalytics");
-            if (itunesConnectAnalyticsInfo != null) {
-                builder.setItunesConnectAnalyticsParameters(getItunesConnectAnalyticsParameters(itunesConnectAnalyticsInfo));
-            }
+        JSONObject googlePlayAnalyticsInfo = params.optJSONObject("googlePlayAnalytics");
+        if (googlePlayAnalyticsInfo != null) {
+            builder.setGoogleAnalyticsParameters(getGoogleAnalyticsParameters(googlePlayAnalyticsInfo));
         }
-
+        JSONObject itunesConnectAnalyticsInfo = params.optJSONObject("itunesConnectAnalytics");
+        if (itunesConnectAnalyticsInfo != null) {
+            builder.setItunesConnectAnalyticsParameters(getItunesConnectAnalyticsParameters(itunesConnectAnalyticsInfo));
+        }
         JSONObject socialMetaTagInfo = params.optJSONObject("socialMetaTagInfo");
         if (socialMetaTagInfo != null) {
             builder.setSocialMetaTagParameters(getSocialMetaTagParameters(socialMetaTagInfo));
         }
-
         return builder;
     }
 
