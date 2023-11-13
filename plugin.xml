@@ -22,7 +22,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <preference name="APP_DOMAIN_PATH" default="/" />
 
     <platform name="ios">
-        <preference name="IOS_FIREBASE_POD_VERSION" default="9.3.0" />
+        <preference name="IOS_FIREBASE_POD_VERSION" default="10.17.0" />
 
         <config-file parent="/*" target="config.xml">
             <preference name="DOMAIN_URI_PREFIX" value="https://$APP_DOMAIN_NAME$APP_DOMAIN_PATH"/>
@@ -81,7 +81,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     </platform>
 
     <platform name="android">
-        <preference name="ANDROID_FIREBASE_BOM_VERSION" default="30.3.1" />
+        <preference name="ANDROID_FIREBASE_BOM_VERSION" default="32.5.0" />
 
         <config-file parent="/*" target="res/xml/config.xml">
             <preference name="DOMAIN_URI_PREFIX" value="https://$APP_DOMAIN_NAME$APP_DOMAIN_PATH"/>
@@ -94,7 +94,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <preference name="AndroidLaunchMode" value="singleTask" />
             <preference name="AndroidXEnabled" value="true" />
             <preference name="GradlePluginGoogleServicesEnabled" value="true" />
-            <preference name="GradlePluginGoogleServicesVersion" value="4.3.13" />
+            <preference name="GradlePluginGoogleServicesVersion" value="4.4.0" />
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
